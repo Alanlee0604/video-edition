@@ -1,0 +1,264 @@
+{
+  "episode": "04",
+  "items": [
+    {
+      "index": 1,
+      "narration": "禁烟以后，心梗住院的人少了。先别急着说这…",
+      "scene": "01_hook",
+      "focusId": "hs",
+      "notes": "心梗住院少了"
+    },
+    {
+      "index": 2,
+      "narration": "我们把图往前拉，看看政策之前。",
+      "scene": "01_hook",
+      "focusId": "b",
+      "notes": "把图往前拉"
+    },
+    {
+      "index": 3,
+      "narration": "假如政策出台之前，住院人数就已经在一年一…",
+      "scene": "02_pull",
+      "focusId": "d",
+      "notes": "政策前已在下降的走势"
+    },
+    {
+      "index": 4,
+      "narration": "不懂这一点，会犯什么错？打个比方，政策前…",
+      "scene": "03_mistake",
+      "focusId": "ns",
+      "notes": "只看前后会误判"
+    },
+    {
+      "index": 5,
+      "narration": "所以，真正要问的是两件事。第一，没有这项…",
+      "scene": "04_two",
+      "focusId": "d",
+      "notes": "两件事：反事实走势 vs 实际"
+    },
+    {
+      "index": 6,
+      "narration": "这里又碰上了“反事实”：如果没有政策，会…",
+      "scene": "05_cf",
+      "focusId": "d",
+      "notes": "反事实=自身过去延伸"
+    },
+    {
+      "index": 7,
+      "narration": "先把研究说具体。英格兰在二〇〇七年七月实…",
+      "scene": "06_study",
+      "focusId": "hs",
+      "notes": "英格兰无烟立法/心梗"
+    },
+    {
+      "index": 8,
+      "narration": "他们收集了政策前五年、政策后十五个月的资…",
+      "scene": "07_data",
+      "focusId": "b",
+      "notes": "五年+十五个月资料"
+    },
+    {
+      "index": 9,
+      "narration": "为什么要这么多资料？因为住院人数不会乖乖…",
+      "scene": "08_three",
+      "focusId": "a0",
+      "notes": "三样影响因素（长期趋势等）"
+    },
+    {
+      "index": 10,
+      "narration": "第一样，长期趋势。很多年下来，住院人数可…",
+      "scene": "09_trend",
+      "focusId": "d",
+      "notes": "长期趋势"
+    },
+    {
+      "index": 11,
+      "narration": "第二样，季节变化。一年里，有的季节住院多…",
+      "scene": "10_season",
+      "focusId": "x",
+      "notes": "季节"
+    },
+    {
+      "index": 12,
+      "narration": "第三样，人口规模。人多了，住院的人数自然…",
+      "scene": "11_pop",
+      "focusId": "a0",
+      "notes": "人口规模"
+    },
+    {
+      "index": 13,
+      "narration": "这三样东西要是没分清，就会被一股脑记到政…",
+      "scene": "12_blame",
+      "focusId": "l",
+      "notes": "三样混记到政策头上"
+    },
+    {
+      "index": 14,
+      "narration": "书里的“打断时间序列”，讲查号收费那一集…",
+      "scene": "13_its",
+      "focusId": "d",
+      "notes": "打断时间序列"
+    },
+    {
+      "index": 15,
+      "narration": "“被打断”，有两种样子。",
+      "scene": "13_its",
+      "focusId": null,
+      "notes": "过渡：被打断的两种样子"
+    },
+    {
+      "index": 16,
+      "narration": "第一种，是突然低了一截，像下了一级台阶。…",
+      "scene": "14_level",
+      "focusId": "b",
+      "notes": "水平台阶下降"
+    },
+    {
+      "index": 17,
+      "narration": "第二种，是下降的速度变了。原来缓缓地降，…",
+      "scene": "15_slope",
+      "focusId": "b",
+      "notes": "斜率变陡"
+    },
+    {
+      "index": 18,
+      "narration": "这两种都是设计上的概念，用来说明这种方法…",
+      "scene": "16_sketch",
+      "focusId": "pen",
+      "notes": "设计概念示意"
+    },
+    {
+      "index": 19,
+      "narration": "不管是哪一种，判断的步骤都一样。第一步，…",
+      "scene": "17_steps",
+      "focusId": "d",
+      "notes": "判断步骤"
+    },
+    {
+      "index": 20,
+      "narration": "所以，不能一看到线往下走，就直接说有政策…",
+      "scene": "18_ref",
+      "focusId": "f",
+      "notes": "别一见下降就归因"
+    },
+    {
+      "index": 21,
+      "narration": "这项研究把长期趋势、季节变化和人口规模都…",
+      "scene": "19_result",
+      "focusId": "o",
+      "notes": "控制趋势季节人口后的结果"
+    },
+    {
+      "index": 22,
+      "narration": "这个数字要细看。它不是拿政策后的住院人数…",
+      "scene": "20_vs",
+      "focusId": "d",
+      "notes": "百分比对照的是反事实"
+    },
+    {
+      "index": 23,
+      "narration": "换句话说，它是在跟“按原来的规律本该有多…",
+      "scene": "20_vs",
+      "focusId": "b",
+      "notes": "跟本该有多少人比"
+    },
+    {
+      "index": 24,
+      "narration": "所以，看到一个百分比，要先弄清它是跟谁比…",
+      "scene": "20_vs",
+      "focusId": "b",
+      "notes": "弄清跟谁比"
+    },
+    {
+      "index": 25,
+      "narration": "这个估计也不是一个死数，它有一个上下浮动…",
+      "scene": "21_ci",
+      "focusId": "a",
+      "notes": "置信区间"
+    },
+    {
+      "index": 26,
+      "narration": "还要记住，这个指标是心梗急诊住院。不能把…",
+      "scene": "22_scope",
+      "focusId": "am",
+      "notes": "指标=心梗急诊住院"
+    },
+    {
+      "index": 27,
+      "narration": "还差一步。就算这个下降估得很准，就能确定…",
+      "scene": "22_scope",
+      "focusId": null,
+      "notes": "过渡：还差一步"
+    },
+    {
+      "index": 28,
+      "narration": "书里把这里的两个问题分开了。",
+      "scene": "22_scope",
+      "focusId": null,
+      "notes": "过渡：两个效度问题"
+    },
+    {
+      "index": 29,
+      "narration": "第一个，叫“统计结论效度”。白话说：这个…",
+      "scene": "23_validity",
+      "focusId": "q",
+      "notes": "统计结论效度"
+    },
+    {
+      "index": 30,
+      "narration": "第二个，叫“内部效度”。白话说：这个变化…",
+      "scene": "23_validity",
+      "focusId": "q",
+      "notes": "内部效度"
+    },
+    {
+      "index": 31,
+      "narration": "为什么非要分开？因为一个数字可以算得很准…",
+      "scene": "23_validity",
+      "focusId": "q",
+      "notes": "为何分开"
+    },
+    {
+      "index": 32,
+      "narration": "打个比方。假设就在禁烟令实施的同一时期，…",
+      "scene": "24_mixed",
+      "focusId": "ns",
+      "notes": "同期别的事=历史威胁例子"
+    },
+    {
+      "index": 33,
+      "narration": "这就是查号收费那一集说的历史威胁。打断时…",
+      "scene": "25_history",
+      "focusId": "l",
+      "notes": "历史威胁"
+    },
+    {
+      "index": 34,
+      "narration": "所以，前一个问题答得好，不会自动替你答完…",
+      "scene": "26_notauto",
+      "focusId": "eb",
+      "notes": "前一问答好不自动答后一问"
+    },
+    {
+      "index": 35,
+      "narration": "这项研究的价值，在于认真用了长期记录，把…",
+      "scene": "27_value",
+      "focusId": "d",
+      "notes": "研究价值=长期记录"
+    },
+    {
+      "index": 36,
+      "narration": "它也提醒我们：时间上的先后，只是因果推理…",
+      "scene": "28_start",
+      "focusId": "p",
+      "notes": "时间先后≠因果"
+    },
+    {
+      "index": 37,
+      "narration": "以后看到“某项政策之后，某个指标降了多少…",
+      "scene": "29_close",
+      "focusId": "b",
+      "notes": "收束：先问跟谁比"
+    }
+  ]
+}

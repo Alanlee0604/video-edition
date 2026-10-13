@@ -68,13 +68,13 @@ function apply(el,v){
 /* ---------- 常用动作（统一入场/出场规则） ---------- */
 function verbs(tl){
   return {
-    in:(sel,at,{dy=16,dur=DUR.std}={})=>tl.to(sel,{opacity:[0,1],y:[dy,0]},at,dur,'out'),
-    pop:(sel,at,dur=DUR.std)=>tl.to(sel,{opacity:[0,1],scale:[.86,1]},at,dur,'back'),
+    in:(sel,at,{dy=16,dur=DUR.std,word}={})=>tl.to(sel,{opacity:[0,1],y:[dy,0]},at,dur,'out'),
+    pop:(sel,at,dur=DUR.std)=>{if(dur&&typeof dur==='object')dur=dur.dur||DUR.std;return tl.to(sel,{opacity:[0,1],scale:[.86,1]},at,dur,'back')},
     stagger:(sels,at,gap=DUR.stagger,o={})=>sels.forEach((s,i)=>tl.to(s,{opacity:[0,1],y:[o.dy??16,0]},at+i*gap,o.dur||DUR.std,'out')),
     out:(sel,at,dur=DUR.exit)=>tl.to(sel,{opacity:[1,0]},at,dur,'in'),
     dim:(sel,at,to=.32)=>tl.to(sel,{opacity:[1,to]},at,DUR.std,'inout'),
     undim:(sel,at,from=.32)=>tl.to(sel,{opacity:[from,1]},at,DUR.std,'inout'),
-    draw:(sel,at,dur=DUR.draw)=>tl.to(sel,{draw:[0,1]},at,dur,'inout'),
+    draw:(sel,at,dur=DUR.draw)=>{if(dur&&typeof dur==='object')dur=dur.dur||DUR.draw;return tl.to(sel,{draw:[0,1]},at,dur,'inout')},
     wipe:(sel,at,dur=DUR.draw)=>tl.to(sel,{wipe:[0,1]},at,dur,'inout'),
     hl:(sel,at)=>tl.to(sel,{hl:[0,1]},at,DUR.micro*1.6,'out'),
     unhl:(sel,at)=>tl.to(sel,{hl:[1,0]},at,DUR.std,'inout'),
@@ -86,51 +86,135 @@ function verbs(tl){
 
 
 /* ---------- 聚焦镜头 ---------- */
-const CAMCFG={gap:2.6,maxS:1.32,minS:1.08,safeTop:150,safeBot:850,W:1920,H:1080};
+const CAMCFG={maxS:1.26,minS:1.08,safeTop:160,safeBot:860,W:1920,H:1080,pad:110,nb:240};
 const CAMLOG=[];
-function camPlan(tl,sc,ev,q){
+function camPlan(tl,sc,ev,q,D,A){
   const C=CAMCFG,cam=sc.cam;cam.style.transformOrigin='50% 50%';
-  const st=document.getElementById('stage').getBoundingClientRect();
-  const box=els=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,n=0;for(const e of els){const r=e.getBoundingClientRect();if(r.width<4||r.height<4)continue;n++;
-      x0=Math.min(x0,r.left-st.left);y0=Math.min(y0,r.top-st.top);x1=Math.max(x1,r.right-st.left);y1=Math.max(y1,r.bottom-st.top)}
+  const st=()=>document.getElementById('stage').getBoundingClientRect();
+  const rect=e=>{const r=e.getBoundingClientRect(),S=st();return {x0:r.left-S.left,y0:r.top-S.top,x1:r.right-S.left,y1:r.bottom-S.top,w:r.width,h:r.height}};
+  const box=els=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,n=0;for(const e of els){if(!e||!e.isConnected)continue;let r=rect(e);
+      // 细描边 path（如 act0 横线）外接框过扁：以中心扩到至少 56×56，避免被跳过
+      if(r.w<4&&r.h<4){try{const bb=e.getBBox?e.getBBox():null;if(bb&&(bb.width>=2||bb.height>=2)){const S=st(),gr=e.ownerSVGElement.getBoundingClientRect(),sx=gr.width/(e.ownerSVGElement.viewBox.baseVal.width||1920),sy=gr.height/(e.ownerSVGElement.viewBox.baseVal.height||1080);const m=e.getScreenCTM();const pt=(x,y)=>{const p=e.ownerSVGElement.createSVGPoint();p.x=x;p.y=y;const q=p.matrixTransform(m);return{x:q.x-S.left,y:q.y-S.top}};const p0=pt(bb.x,bb.y),p1=pt(bb.x+bb.width,bb.y+bb.height);r={x0:Math.min(p0.x,p1.x),y0:Math.min(p0.y,p1.y),x1:Math.max(p0.x,p1.x),y1:Math.max(p0.y,p1.y),w:0,h:0};r.w=r.x1-r.x0;r.h=r.y1-r.y0;}}catch(_){}}
+      if(r.w<8||r.h<8){const cx=(r.x0+r.x1)/2,cy=(r.y0+r.y1)/2,hw=Math.max(28,r.w/2),hh=Math.max(28,r.h/2);r={x0:cx-hw,y0:cy-hh,x1:cx+hw,y1:cy+hh,w:hw*2,h:hh*2};}
+      if(r.w<4||r.h<4)continue;n++;x0=Math.min(x0,r.x0);y0=Math.min(y0,r.y0);x1=Math.max(x1,r.x1);y1=Math.max(y1,r.y1)}
     return n?{x0,y0,x1,y1,w:x1-x0,h:y1-y0}:null};
-  const HIDE={out:1,dim:1};
-  const evs=ev.map(([t,sel,d,k])=>({t,k,els:[...sc.el.querySelectorAll(q(sel))]})).sort((a,b)=>a.t-b.t);
-  const hiddenAfter=(e,t,until)=>evs.some(v=>v.t>t&&v.t<until&&HIDE[v.k]&&v.els.some(x=>x===e||x.contains(e)||e.contains(x)));
-  // 计算一个取景：把 b 放到画面中心（略偏上，避开字幕），缩放不超过 maxS，且主体完整留在安全区内
-  const frame=b=>{if(!b)return null;const safeH=C.safeBot-C.safeTop;
-    let s=Math.min(C.maxS,(C.W*0.82)/b.w,(safeH*0.9)/b.h);if(s<C.minS)return null;
+  // 邻接扩边：同卡内优先；无卡时扩近距小号物件（收银机/喇叭），不吞隔壁整卡
+  const expand=(b,focusEl)=>{
+    if(!b)return null;
+    const cx=(b.x0+b.x1)/2,cy=(b.y0+b.y1)/2;
+    let x0=b.x0,y0=b.y0,x1=b.x1,y1=b.y1;
+    const isCard=id=>/^(c|col|tb)\d+$/.test(id);
+    const homeCard=[...sc.el.querySelectorAll('[id]')].find(c=>isCard(c.id)&&(c.contains(focusEl)|| (()=>{const cr=rect(c);return cr.x0-16<=b.x0&&cr.x1+16>=b.x1&&cr.y0-16<=b.y0&&cr.y1+16>=b.y1})()));
+    for(const e of sc.el.querySelectorAll('[id]')){
+      if(!e||e===focusEl||e.id==='m'||e.id==='gnd')continue;
+      if(isCard(e.id)&&homeCard&&e!==homeCard)continue;
+      const r=rect(e),area=r.w*r.h; if(area<1200||area>380000)continue;
+      if(homeCard){const cr=rect(homeCard); if(!(r.x0>=cr.x0-40&&r.x1<=cr.x1+40&&r.y0>=cr.y0-60&&r.y1<=cr.y1+60))continue;}
+      else {
+        if(isCard(e.id))continue;
+        const ecx=(r.x0+r.x1)/2,ecy=(r.y0+r.y1)/2;
+        if(Math.hypot(ecx-cx,ecy-cy)>C.nb)continue;
+      }
+      x0=Math.min(x0,Math.max(r.x0,b.x0-150)); y0=Math.min(y0,Math.max(r.y0,b.y0-110));
+      x1=Math.max(x1,Math.min(r.x1,b.x1+150)); y1=Math.max(y1,Math.min(r.y1,b.y1+110));
+    }
+    x0-=C.pad*0.35; y0-=C.pad*0.35; x1+=C.pad*0.35; y1+=C.pad*0.35;
+    return {x0,y0,x1,y1,w:x1-x0,h:y1-y0};
+  };
+  const frame=(b,id)=>{
+    if(!b)return null; const safeH=C.safeBot-C.safeTop;
+    let s=Math.min(C.maxS,(C.W*0.72)/Math.max(b.w,1),(safeH*0.85)/Math.max(b.h,1));
+    if(s<C.minS)s=C.minS;
     const cx=(b.x0+b.x1)/2,cy=(b.y0+b.y1)/2,ty=(C.safeTop+C.safeBot)/2;
     let x=-(cx-C.W/2)*s,y=(ty-C.H/2)-(cy-C.H/2)*s;
-    const mx=C.W/2*(s-1),my=C.H/2*(s-1);x=Math.max(-mx,Math.min(mx,x));y=Math.max(-my,Math.min(my,y));
-    // 校验主体落在安全区
+    const clamp=()=>{const mx=C.W/2*(s-1),my=C.H/2*(s-1);x=Math.max(-mx,Math.min(mx,x));y=Math.max(-my,Math.min(my,y))};
+    clamp();
     const X=p=>C.W/2+(p-C.W/2)*s+x,Y=p=>C.H/2+(p-C.H/2)*s+y;
-    if(X(b.x0)<20||X(b.x1)>C.W-20||Y(b.y0)<C.safeTop-40||Y(b.y1)>C.safeBot+10)return null;
-    return {s:+s.toFixed(4),x:+x.toFixed(1),y:+y.toFixed(1)}};
-  const pts=[...new Set([sc.t0,...evs.map(v=>v.t)].map(x=>+x.toFixed(2)))].filter(x=>x>=sc.t0-.01&&x<sc.t1).sort((a,b)=>a-b);pts.push(sc.t1);
-  let cur={s:1,x:0,y:0};
-  const go=(to,at,dur)=>{tl.to(cam,{scale:[cur.s,to.s],x:[cur.x,to.x],y:[cur.y,to.y]},at,dur,'inout');CAMLOG.push({scene:sc.id,at:+at.toFixed(2),dur,to});cur=to};
-  for(let i=0;i+1<pts.length;i++){
-    const a=pts[i],b=pts[i+1],g=b-a;if(g<=C.gap)continue;
-    const last=i+1===pts.length-1;      // 间隙一直到场景结束：不必回全景
-    // 候选焦点：此刻之前最近被提到、且之后仍可见的元素，按时间倒序
-    const cands=evs.filter(v=>v.t<=a+.01&&!HIDE[v.k]).reverse().map(v=>({v,b:box(v.els.filter(e=>!hiddenAfter(e,v.t,b)))})).map(o=>({...o,f:frame(o.b)})).filter(o=>o.f);
-    // 补充候选：场景里一开始就可见的主体（根节点的子元素），排除之后才出现的元素
-    const later=evs.filter(v=>v.t>a+.01).flatMap(v=>v.els);
-    const root=sc.el.querySelector('#m')||sc.el.querySelector('svg')||sc.cam;
-    const statics=[...root.children].filter(e=>!later.some(x=>x===e||x.contains(e)||e.contains(x))&&!hiddenAfter(e,a,b)).map(e=>({b:box([e])})).filter(o=>o.b&&o.b.w*o.b.h>15000).sort((p,q)=>q.b.w*q.b.h-p.b.w*p.b.h).map(o=>({...o,f:frame(o.b)})).filter(o=>o.f);
-    const seen=new Set();const pool=[...cands,...statics].filter(o=>{const k=Math.round(o.f.s*20)+','+Math.round(o.f.x/40)+','+Math.round(o.f.y/40);if(seen.has(k))return false;seen.add(k);return true});
-    cands.length=0;cands.push(...pool);
-    if(!cands.length)continue;
-    const dIn=g<4?0.9:1.2,dOut=g<4?0.9:1.0,tIn=a+0.35,tOut=last?b:b-dOut-0.05;
-    go(cands[0].f,tIn,dIn);
-    let t=tIn+dIn,k=1;
-    while(tOut-t>3.0){ // 长间隙：每 ≤3s 移到下一个重点（或在同一重点上再推近一点），仍是一次性单向移动
-      let nx=cands[k]?cands[k].f:null;k++;
-      if(!nx){if(cur.s+0.05<=C.maxS+0.03)nx={s:+(cur.s+0.05).toFixed(4),x:+(cur.x*(cur.s+0.05)/cur.s).toFixed(1),y:+(cur.y*(cur.s+0.05)/cur.s).toFixed(1)};else nx={s:1,x:0,y:0};}
-      if(nx.s===1&&!last){break}
-      const at=t+Math.min(2.2,(tOut-t-1.0)/2);go(nx,at,1.0);t=at+1.0}
-    if(!last)go({s:1,x:0,y:0},tOut,dOut);
+    for(let k=0;k<8;k++){
+      if(X(b.x0)>=48&&X(b.x1)<=C.W-48&&Y(b.y0)>=C.safeTop&&Y(b.y1)<=C.safeBot+8)break;
+      s=Math.max(C.minS,s-0.035); x=-(cx-C.W/2)*s; y=(ty-C.H/2)-(cy-C.H/2)*s; clamp();
+    }
+    if(X(b.x0)<6||X(b.x1)>C.W-6)return null;
+    return {s:+s.toFixed(4),x:+x.toFixed(1),y:+y.toFixed(1),id:id||''};
+  };
+  // —— 官方 focus_map：一段旁白一个 focusId（index = paragraphs.id+1）——
+  const list=(typeof window!=='undefined'&&window.FOCUS_MAP&&Array.isArray(window.FOCUS_MAP.items))?window.FOCUS_MAP.items:[];
+  const slug=sc.id; // scenes.js 里的 id，对应 map.scene 的 _ 后半段
+  const track=[];
+  for(const row of list){
+    if(!row||row.focusId==null||row.focusId==='')continue;
+    const paraId=(row.index|0)-1;
+    const p=D.paragraphs[paraId]; if(!p)continue;
+    // 旁白可跨多场景：用时间相交 + DOM 有该 id；scene slug 仅作优先，不硬拦
+    if(!(p.end>sc.t0+0.05 && p.start<sc.t1-0.05))continue;
+    const el=sc.el.querySelector(q('#'+row.focusId));
+    if(!el)continue;
+    const sceneSlug=(row.scene||'').replace(/^\d+_/,'');
+    const b0=box([el]); if(!b0)continue;
+    const f=frame(expand(b0,el),row.focusId); if(!f)continue;
+    const tIn=Math.max(p.start, sc.t0+0.05);
+    track.push({t:tIn,id:row.focusId,f,end:Math.min(p.end,sc.t1),prefer:sceneSlug===slug?1:0});
+  }
+  // 同段多命中时保留 prefer 高的
+  {const byT={}; for(const x of track){const k=x.t.toFixed(2); if(!byT[k]||(x.prefer||0)>(byT[k].prefer||0))byT[k]=x;}
+   track.length=0; for(const k of Object.keys(byT).sort((a,b)=>+a-+b)) track.push(byT[k]);}
+  // 无表或本场景无命中时：回退到旁白动作里最近的单元素（保持旧逻辑的精简版）
+  if(!track.length){
+    const HIDE={out:1,dim:1};
+    for(const [t,sel,d,k] of ev){
+      if(HIDE[k]||t<sc.t0-0.1||t>sc.t1)continue;
+      const raw=(typeof sel==='string'?sel:'').split(',')[0].trim(); if(!raw||raw==='#m')continue;
+      let el=sc.el.querySelector(q(raw));
+      const mm=raw.match(/^#n(\d+)$/);
+      if(mm){const card=sc.el.querySelector(q('#c'+mm[1])); if(card){
+        const cr=rect(card); const kids=[...sc.el.querySelectorAll('[id]')].filter(e=>{
+          if(/^n\d+$/.test(e.id)||e.id==='m'||e.id===card.id)return false;
+          const r=rect(e); const ecx=(r.x0+r.x1)/2; return r.w>24&&ecx>=cr.x0-20&&ecx<=cr.x1+20;}).sort((a,b)=>rect(b).w*rect(b).h-rect(a).w*rect(a).h);
+        el=kids[0]||card;}}
+      if(!el)continue; const b0=box([el]); if(!b0)continue;
+      const f=frame(expand(b0,el),el.id); if(!f)continue;
+      if(track.length&&track[track.length-1].id===el.id&&t-track[track.length-1].t<0.7)continue;
+      track.push({t,id:el.id,f,end:t+2});
+    }
+  }
+  track.sort((a,b)=>a.t-b.t);
+  let cur={s:1,x:0,y:0,id:''};
+  const go=(to,at,dur)=>{if(Math.abs(to.s-cur.s)<0.01&&Math.abs(to.x-cur.x)<2&&Math.abs(to.y-cur.y)<2){cur=to;return}
+    const d=Math.max(0.8,Math.min(1.35,dur));
+    tl.to(cam,{scale:[cur.s,to.s],x:[cur.x,to.x],y:[cur.y,to.y]},at,d,'inout');
+    CAMLOG.push({scene:sc.id,at:+at.toFixed(2),dur:d,to,id:to.id||''}); cur=to};
+  for(let i=0;i<track.length;i++){
+    const curF=track[i], next=track[i+1];
+    const tIn=Math.max(sc.t0+0.15, curF.t+0.1);
+    if(tIn>=sc.t1-0.35)break;
+    const holdEnd=next?next.t:Math.min(sc.t1, Math.max(curF.end||tIn+2.5, tIn+2.2));
+    if(holdEnd-tIn<0.9)continue;
+    go(curF.f,tIn, holdEnd-tIn<2.3?0.85:1.15);
+    // 长停留单向轻推，压静止
+    let t=tIn+1.2, bumps=0; const limit=holdEnd-(next?0.95:1.1);
+    while(t+2.15<limit && bumps<6){
+      const bump=Math.min(C.maxS, cur.s+0.03);
+      const nx=bump-cur.s>=0.02?{s:+bump.toFixed(4),x:+(cur.x*bump/Math.max(cur.s,1)+(cur.x<=0?8:-8)).toFixed(1),y:+(cur.y*bump/Math.max(cur.s,1)).toFixed(1),id:cur.id}
+               :{s:cur.s,x:+(cur.x+(cur.x<=0?14:-14)).toFixed(1),y:cur.y,id:cur.id};
+      go(nx,t+1.35,0.85); t+=2.15; bumps++;
+    }
+    // 长段不中途拉回 1x（易留下大段静止）；仅在下一焦点前略收回
+    if(next && next.t-curF.t>5.2) go({s:Math.max(C.minS, cur.s*0.92),x:+(cur.x*0.7).toFixed(1),y:+(cur.y*0.7).toFixed(1),id:cur.id||''}, next.t-1.15, 0.95);
+  }
+  // 场景级补丁：长间隙每隔 ~2.15s 轻挪一次（含平移），避免 freezedetect
+  {const camTw=tl.tw.filter(w=>w.el===cam).sort((a,b)=>a.at-b.at);
+    const edges=[sc.t0,...camTw.map(w=>w.at+(w.dur||0)),sc.t1].sort((a,b)=>a-b);
+    for(let i=0;i+1<edges.length;i++){const a=edges[i],b=edges[i+1]; if(b-a<=2.35)continue;
+      let at=a+2.05, n=0;
+      while(at<b-0.85 && n<10){
+        if(at>=sc.t0+0.2&&at<=sc.t1-0.65){
+          const bump=Math.min(C.maxS, Math.max(C.minS,(cur.s>1?cur.s:1.1))+0.04);
+          const dx=((n%2)?1:-1)*18;
+          go({s:+bump.toFixed(4),x:+((cur.x||0)+dx).toFixed(1),y:cur.y||0,id:cur.id||''},at,0.8);
+        }
+        at+=2.15; n++;
+      }
+    }
   }
 }
 
@@ -143,7 +227,7 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
   const anno=document.getElementById('anno'),sub=document.getElementById('sub');
   document.getElementById('ep').textContent=episode||'';
   const ACT=[];
-  const CAM=(sc,ev,q)=>camPlan(tl,sc,ev,q);
+  const CAM=(sc,ev,q)=>camPlan(tl,sc,ev,q,D,A);
   const S=scenes.map((sc,i)=>{
     const el=document.createElement('section');el.className='scene'+(sc.theme?' theme-'+sc.theme:'');el.dataset.id=sc.id;
     el.innerHTML=`<div class="cam">${sc.html}</div>`;stage.insertBefore(el,anno);
@@ -159,7 +243,7 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
     // 镜头完全静止：不推近、不漂移、不往复
     // 场景内动作（作用域限定在本场景）
     const q=s=>s.split(',').map(x=>`section[data-id="${sc.id}"] ${x.trim()}`).join(',');
-    const ev=[];const scoped={};for(const k in V)scoped[k]=(s,...r)=>{if(typeof s==='string'&&typeof r[0]==='number')ev.push([r[0],s,k==='draw'?DUR.draw:DUR.std,k]);return V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r)};
+    const ev=[];const scoped={};for(const k in V)scoped[k]=(s,...r)=>{if(typeof s==='string'&&typeof r[0]==='number'){let word='';const last=r[r.length-1]; if(last&&typeof last==='object'&&!Array.isArray(last)&&last.word)word=last.word; ev.push([r[0],s,k==='draw'?DUR.draw:DUR.std,k,word]);};return V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r)};
     scoped.to=(s,p,...r)=>tl.to(q(s),p,...r);
     scoped.seq=items=>V.seq(items.map(([s,t])=>[q(s),t]));
     sc.build({...scoped,A,t0:sc.t0,t1:sc.t1});
