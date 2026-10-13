@@ -1,8 +1,8 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:#000}
-#stage{position:relative;width:var(--W);height:var(--H);overflow:hidden;background:var(--bg);color:var(--ink);
+#stage{position:relative;width:var(--W);height:var(--H);overflow:hidden;background:#000;color:var(--ink);
   font-family:"Num","NotoSC",sans-serif;font-weight:var(--w1);font-feature-settings:"tnum"}
-.scene{position:absolute;inset:0;visibility:hidden}
+.scene{position:absolute;inset:0;visibility:hidden;background:var(--bg);color:var(--ink)}
 .cam{position:absolute;inset:0}
 .abs{position:absolute}
 /* 版式区：标注 96–136｜标题 150–230｜内容 300–820｜字幕 ≤984 */
@@ -26,3 +26,7 @@ svg text{font-family:"Num","NotoSC";fill:var(--g1);font-size:28px}
 #sub{position:absolute;left:var(--gx);right:var(--gx);bottom:96px;text-align:center;font-size:var(--fs-sub);line-height:1.3;color:var(--ink)}
 #sub:empty{display:none}
 #ep{display:none}
+
+#stage[data-theme=u]{--a:var(--CR);--af:var(--SU)}#stage[data-theme=i]{--a:var(--CR);--af:var(--CO)}#stage[data-theme=c]{--a:var(--INK);--af:var(--CO)}#stage[data-theme=m]{--a:var(--INK);--af:var(--U)}
+#stage[data-theme] #anno{color:var(--a);opacity:.85}#stage[data-theme] #anno::before{background:var(--af)}#stage[data-theme] #sub{color:var(--a)}
+.term{color:var(--pink)}

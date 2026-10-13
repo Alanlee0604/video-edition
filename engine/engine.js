@@ -60,7 +60,7 @@ function apply(el,v){
     if(el instanceof SVGElement){s.transformBox='fill-box';s.transformOrigin=el.dataset.origin||'center'}
   }
   if('draw' in v){el.setAttribute('pathLength','1');s.strokeDasharray='1 1';s.strokeDashoffset=String(1-v.draw)}
-  if('wipe' in v){s.clipPath=`inset(-20px ${(1-v.wipe)*100}% -20px -20px)`}
+  if('wipe' in v){s.clipPath=v.wipe>=1?'none':`inset(-20px ${(1-v.wipe)*100}% -20px -20px)`}
   if('hl' in v){s.setProperty('--hl',v.hl)}
   if('num' in v){const d=+(el.dataset.dp||0);el.textContent=(el.dataset.pre||'')+v.num.toFixed(d)+(el.dataset.suf||'')}
 }
@@ -87,24 +87,25 @@ function verbs(tl){
 /* ---------- 场景运行时 ---------- */
 const LABEL_KINDS={schematic:'示意图',teaching:'教学示例 · 非研究数据',record:'书中描述 · 方向示意，非原始数值'};
 const G=c=>120+c*142, SPAN=n=>n*142-24; // 12 栏网格：第 c 栏左边缘 / 跨 n 栏宽度
-function Episode({timeline:D,scenes,episode,offset=0}){
+function Episode({timeline:D,scenes,episode,offset=0,subs=null}){
   const A=Anchors(D),tl=new Timeline(),V=verbs(tl),stage=document.getElementById('stage');
   stage.insertAdjacentHTML('beforeend','<div id="anno"></div><div id="ep"></div><div id="sub"></div>');
   const anno=document.getElementById('anno'),sub=document.getElementById('sub');
   document.getElementById('ep').textContent=episode||'';
   const S=scenes.map((sc,i)=>{
-    const el=document.createElement('section');el.className='scene';el.dataset.id=sc.id;
+    const el=document.createElement('section');el.className='scene'+(sc.theme?' theme-'+sc.theme:'');el.dataset.id=sc.id;
     el.innerHTML=`<div class="cam">${sc.html}</div>`;stage.insertBefore(el,anno);
     return {...sc,el,cam:el.firstChild};
   });
   // 场景时间：起点由旁白锚点给出，终点 = 下一场景起点
   S.forEach((sc,i)=>{sc.t0=sc.start(A);});
   S.forEach((sc,i)=>{sc.t1=i+1<S.length?S[i+1].t0:D.duration+1;
-    const fadeIn=i===0?0:DUR.scene;
-    tl.to(sc.el,{opacity:[0,1]},sc.t0-fadeIn*0.5,fadeIn||1e-3,'inout');
-    if(i+1<S.length)tl.to(sc.el,{opacity:[1,0]},sc.t1-DUR.scene*0.5,DUR.scene,'inout');
-    // 环境镜头：整场缓慢漂移（±8px，不放大以免越出安全区），保证没有死帧
-    tl.to(sc.cam,{x:[-8,8],y:[5,-5]},sc.t0-0.3,sc.t1-sc.t0+0.6,'linear');
+    // 转场：色块擦除（shape wipe）——新场景从左向右整块盖过旧场景；旧场景在被盖满后才隐藏
+    tl.to(sc.el,{opacity:[0,1]},sc.t0-DUR.scene*0.5,1e-3,'linear');
+    if(i>0)tl.to(sc.el,{wipe:[0,1]},sc.t0-DUR.scene*0.5,DUR.scene,'inout');
+    if(i+1<S.length)tl.to(sc.el,{opacity:[1,0]},sc.t1+DUR.scene*0.5+0.02,1e-3,'linear');
+    // 环境镜头：整场缓慢漂移（±16px，不放大以免越出安全区），保证没有死帧
+    tl.to(sc.cam,{x:[-16,16],y:[8,-8]},sc.t0-0.3,sc.t1-sc.t0+0.6,'linear');
     // 场景内动作（作用域限定在本场景）
     const q=s=>s.split(',').map(x=>`section[data-id="${sc.id}"] ${x.trim()}`).join(',');
     const scoped={};for(const k in V)scoped[k]=(s,...r)=>V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r);
@@ -112,17 +113,22 @@ function Episode({timeline:D,scenes,episode,offset=0}){
     scoped.seq=items=>V.seq(items.map(([s,t])=>[q(s),t]));
     sc.build({...scoped,A,t0:sc.t0,t1:sc.t1});
   });
+  // 精简字幕：[段落, 锚点词('' = 段落开头), 文本]；显示到下一条开始，最长到本段结束后 0.6 秒
+  let SUBS=null;
+  if(subs){SUBS=subs.map(([p,w,text])=>({p,text,start:w?A.W(p,w):A.P(p)}));SUBS.sort((a,b)=>a.start-b.start);
+    SUBS.forEach((s,k)=>{const nx=k+1<SUBS.length?SUBS[k+1].start:D.duration;s.end=Math.min(nx,Math.max(A.E(s.p)+0.6,s.start+1.2))});}
   tl._index();
   function sceneAt(t){let cur=S[0];for(const s of S)if(t>=s.t0-DUR.scene*0.5)cur=s;return cur}
   function seek(t){
     t+=offset;tl.seek(t);
     const sc=sceneAt(t),lab=sc.label||LABEL_KINDS[sc.kind]||'';
     anno.textContent=lab;anno.style.opacity=lab?1:0;anno.dataset.kind=sc.kind||'';
-    const c=D.captions.filter(c=>t>=c.start&&t<c.end).pop();
+    stage.dataset.theme=sc.theme||'';
+    const c=SUBS?SUBS.filter(c=>t>=c.start&&t<c.end).pop():D.captions.filter(c=>t>=c.start&&t<c.end).pop();
     const h=c?(c.lines||[c.text]).join('<br>'):'';if(sub.innerHTML!==h)sub.innerHTML=h;
     return {t,scene:sc.id,kind:sc.kind||'',label:lab};
   }
-  window.EP={tl,seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
+  window.EP={subs:SUBS,tl,seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
   window.seek=seek;
   return window.EP;
 }

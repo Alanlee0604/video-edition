@@ -23,7 +23,7 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--page',required=True);ap.add_argument('--start',type=float,default=0);ap.add_argument('--end',type=float,required=True)
     ap.add_argument('--audio');ap.add_argument('--out',required=True);ap.add_argument('--fps',type=int,default=30);ap.add_argument('--workers',type=int,default=6)
-    ap.add_argument('--keep',action='store_true')
+    ap.add_argument('--keep',action='store_true');ap.add_argument('--audio-start',type=float,default=0)
     a=ap.parse_args()
     url='file://'+os.path.abspath(a.page)
     n=round((a.end-a.start)*a.fps);tmp=tempfile.mkdtemp(prefix='frames_',dir=os.path.dirname(os.path.abspath(a.out)))
@@ -34,7 +34,7 @@ def main():
         done=sum(ex.map(worker,[(url,c,a.fps,tmp) for c in chunks]))
     print(f'frames {done} in {time.time()-t0:.0f}s',flush=True)
     cmd=['ffmpeg','-v','error','-y','-framerate',str(a.fps),'-i',os.path.join(tmp,'%06d.png')]
-    if a.audio:cmd+=['-i',a.audio,'-map','0:v','-map','1:a','-c:a','copy','-shortest']
+    if a.audio:cmd+=['-ss',str(a.audio_start),'-t',str(n/a.fps),'-i',a.audio,'-map','0:v','-map','1:a','-c:a','copy','-shortest']
     cmd+=['-c:v','libx264','-crf','16','-preset','slow','-tune','animation','-pix_fmt','yuv420p','-colorspace','bt709','-color_primaries','bt709','-color_trc','bt709','-movflags','+faststart',a.out]
     subprocess.run(cmd,check=True)
     if not a.keep:shutil.rmtree(tmp)

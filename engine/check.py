@@ -29,8 +29,9 @@ def main():
                     k=u.get('text') or u.get('shape');unsafe.setdefault(info['scene']+' | '+k,[u['rect'],round(t,2)])
                 if pg.evaluate(f"EP.needsLabel('{info['kind']}')") and not r['label']['visible']:nolabel.append([round(t,2),info['scene']])
                 t+=a.step
+            subs=pg.evaluate('(EP.subs||[]).map(s=>s.text)');longsubs=[x for x in subs if len(x)>14]
             b.close()
-        rep['audit']={'samples':n,'page_errors':errs,'small_text':small,'outside_safe_area':unsafe,'missing_label':nolabel}
+        rep['audit']={'subtitles':len(subs),'subtitles_over_14':longsubs,'samples':n,'page_errors':errs,'small_text':small,'outside_safe_area':unsafe,'missing_label':nolabel}
     json.dump(rep,open(a.json,'w'),ensure_ascii=False,indent=1)
     print(json.dumps({k:(v if k!='audit' else {kk:(len(vv) if isinstance(vv,(dict,list)) else vv) for kk,vv in v.items()}) for k,v in rep.items() if v is not None},ensure_ascii=False)[:3000])
 if __name__=='__main__':main()

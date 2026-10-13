@@ -27,5 +27,11 @@ const K={G,SPAN,
   nodeOn:(id,x,y,n,{r=34}={})=>`<g id="${id}"><circle cx="${x}" cy="${y}" r="${r}" fill="var(--pink)"/><text x="${x}" y="${y+11}" text-anchor="middle" style="fill:var(--bg);font-size:32px;font-weight:700">${n}</text></g>`,
   bar:(id,x,y,w,h,{tone='g',dashed=false}={})=>`<rect id="${id}" data-origin="center bottom" x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${dashed?'none':tone==='pink'?'var(--pink)':'var(--g3)'}" ${dashed?'stroke="var(--g1)" stroke-width="2.5" stroke-dasharray="10 10"':''}/>`,
 };
+/* 线性图标：Lucide 原路径，统一 2.25px 等宽描边（non-scaling-stroke）、圆角端点。
+   (x,y) 为图标中心，size 为边长像素；tone: ink|g|pink */
+K.icon=(id,name,x,y,size=96,tone='ink')=>{const P=window.ICONS[name];if(!P)throw Error('无此图标 '+name);const c=tone==='pink'?'var(--pink)':tone==='g'?'var(--g1)':'var(--ink)';
+  return `<g id="${id}"><g transform="translate(${x-size/2} ${y-size/2}) scale(${size/24})" fill="none" stroke="${c}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" class="ico">${P.replace(/<(path|circle|rect|line|polyline|ellipse)/g,'<$1 vector-effect="non-scaling-stroke"')}</g></g>`};
+/* 迷你趋势线（方向示意）：dir = up|flat|down */
+K.spark=(id,x,y,w=200,dir='flat',cls='g')=>{const h=dir==='up'?-Math.max(70,w*.18):dir==='down'?50:0;return `<path id="${id}" class="ln ${cls}" d="M${x} ${y} C ${x+w*.4} ${y}, ${x+w*.55} ${y+h*.2}, ${x+w} ${y+h}"/>`};
 window.KIT=K;
 })();
