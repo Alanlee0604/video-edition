@@ -1,0 +1,250 @@
+{
+  "episode": "07",
+  "items": [
+    {
+      "index": 1,
+      "narration": "抽签明明是随机的，为什么最后还是可能比错…",
+      "scene": "01_hook",
+      "focusId": "dr",
+      "notes": "摇奖箱=抽签"
+    },
+    {
+      "index": 2,
+      "narration": "因为抽中的是申请机会，不是保险直接到账。",
+      "scene": "02_ticket",
+      "focusId": "tk",
+      "notes": "申请机会=黄票；对比空心盾牌 sh"
+    },
+    {
+      "index": 3,
+      "narration": "中签以后，还有好几步。得自己去办申请；申…",
+      "scene": "03_steps",
+      "focusId": "st",
+      "notes": "资格审核=印章；申请链 tk→fm→st→sh"
+    },
+    {
+      "index": 4,
+      "narration": "如果你最后只把真正参保的人挑出来，和没参…",
+      "scene": "04_regroup",
+      "focusId": "g0",
+      "notes": "重新按参保拆组=参保框"
+    },
+    {
+      "index": 5,
+      "narration": "先说这次抽签。二〇〇八年，俄勒冈州用抽签…",
+      "scene": "05_oregon",
+      "focusId": "dr",
+      "notes": "俄勒冈抽签"
+    },
+    {
+      "index": 6,
+      "narration": "抽签有什么用？我们一步一步看。第一，谁中…",
+      "scene": "06_why",
+      "focusId": "dr",
+      "notes": "抽签机制总览"
+    },
+    {
+      "index": 7,
+      "narration": "这里有一个前提：抽签规则得定得合理，也得…",
+      "scene": "07_rule",
+      "focusId": "bk",
+      "notes": "规则书；偶然=di"
+    },
+    {
+      "index": 8,
+      "narration": "但随机分出去的，只是申请机会。这不表示每…",
+      "scene": "08_cross",
+      "focusId": "f1",
+      "notes": "中签组里仍有未参保"
+    },
+    {
+      "index": 9,
+      "narration": "论文发现，中签让拥有保险的概率提高了大约…",
+      "scene": "09_rate",
+      "focusId": "pp",
+      "notes": "+25百分点标签"
+    },
+    {
+      "index": 10,
+      "narration": "这个数字很容易读错。它说的是两组之间的概…",
+      "scene": "10_diff",
+      "focusId": "br",
+      "notes": "两组柱差=概率差"
+    },
+    {
+      "index": 11,
+      "narration": "那就有一个很自然的问题：有人根本没参保，…",
+      "scene": "11_why2",
+      "focusId": "bx",
+      "notes": "未参保者仍进投票箱/中签组"
+    },
+    {
+      "index": 12,
+      "narration": "先看这样做，回答的是什么问题。它回答的是…",
+      "scene": "12_itt",
+      "focusId": "tk",
+      "notes": "申请机会的整体影响"
+    },
+    {
+      "index": 13,
+      "narration": "现实里，一个机会发出去，有人用，有人不用…",
+      "scene": "13_use",
+      "focusId": "x2",
+      "notes": "删掉不用机会的人=打叉的人"
+    },
+    {
+      "index": 14,
+      "narration": "书里把这种做法叫“意向处理分析”，也就是…",
+      "scene": "14_term",
+      "focusId": "term",
+      "notes": "意向处理分析/ITT"
+    },
+    {
+      "index": 15,
+      "narration": "ITT 为什么可靠？因为它保住了随机分组…",
+      "scene": "15_reliable",
+      "focusId": "mg",
+      "notes": "失访/测量检查=放大镜"
+    },
+    {
+      "index": 16,
+      "narration": "它的局限也很清楚。它估计的是“获得申请机…",
+      "scene": "16_limit",
+      "focusId": "tk",
+      "notes": "ITT估的是机会不是保险"
+    },
+    {
+      "index": 17,
+      "narration": "那为什么不能直接拿实际参保的人，和没参保…",
+      "scene": "17_direct",
+      "focusId": "vs",
+      "notes": "参保 vs 未参保直接比"
+    },
+    {
+      "index": 18,
+      "narration": "假设身体更差的人，更愿意去办保险；或者，…",
+      "scene": "18_select",
+      "focusId": "h0",
+      "notes": "身体差→更愿办保险"
+    },
+    {
+      "index": 19,
+      "narration": "而这些特点，本身又可能影响看病、医疗支出…",
+      "scene": "19_affect",
+      "focusId": "cl",
+      "notes": "看病/支出/健康"
+    },
+    {
+      "index": 20,
+      "narration": "一步一步推下来：参保的人和没参保的人，原…",
+      "scene": "20_mix",
+      "focusId": "t",
+      "notes": "选择问题标签"
+    },
+    {
+      "index": 21,
+      "narration": "打个比方，假设参保的人看病次数更多。你没…",
+      "scene": "21_visits",
+      "focusId": "cl",
+      "notes": "诊所=看病次数"
+    },
+    {
+      "index": 22,
+      "narration": "随机的是申请机会。实际参保，还经过了人的…",
+      "scene": "22_layer",
+      "focusId": "tk",
+      "notes": "随机的是申请机会"
+    },
+    {
+      "index": 23,
+      "narration": "那想知道保险本身的效果，怎么办？",
+      "scene": "23_how",
+      "focusId": "q",
+      "notes": "过渡问句，焦点在问号"
+    },
+    {
+      "index": 24,
+      "narration": "研究者可以借助“工具变项”的思路。白话说…",
+      "scene": "24_iv",
+      "focusId": "term",
+      "notes": "工具变项"
+    },
+    {
+      "index": 25,
+      "narration": "直观地说，分两步。第一步，看中签让结果改…",
+      "scene": "25_ratio",
+      "focusId": "e",
+      "notes": "ITT÷0.25 等式"
+    },
+    {
+      "index": 26,
+      "narration": "为什么可以这样除？打个比方。假设中签让某…",
+      "scene": "26_quarter",
+      "focusId": "v4",
+      "notes": "+4 高柱=分到遵从者身上"
+    },
+    {
+      "index": 27,
+      "narration": "所以，这样估出来的是：对那些因为中签才去…",
+      "scene": "27_complier",
+      "focusId": "p1",
+      "notes": "因中签才参保的人（中签卡）"
+    },
+    {
+      "index": 28,
+      "narration": "但这个推理，要靠额外的条件。",
+      "scene": "28_need",
+      "focusId": "s",
+      "notes": "额外条件槽"
+    },
+    {
+      "index": 29,
+      "narration": "第一，抽签本身不能绕开保险，走别的路去影…",
+      "scene": "29_bypass",
+      "focusId": "sn",
+      "notes": "心情/太阳=绕路例子"
+    },
+    {
+      "index": 30,
+      "narration": "第二，不能有人“反着来”：本来会参保，偏…",
+      "scene": "30_mono",
+      "focusId": "term",
+      "notes": "单调性"
+    },
+    {
+      "index": 31,
+      "narration": "所以，这个估计只管一类人：因为中签才参保…",
+      "scene": "31_scope",
+      "focusId": "c1",
+      "notes": "中间那类=因中签才参保"
+    },
+    {
+      "index": 32,
+      "narration": "这项研究第一年的结果支持：保险让人更多地…",
+      "scene": "32_results",
+      "focusId": "cl",
+      "notes": "第一年：看病更多"
+    },
+    {
+      "index": 33,
+      "narration": "“自报健康”，是受访者自己报告的状况。不…",
+      "scene": "33_self",
+      "focusId": "qs",
+      "notes": "自报健康问卷；对照试管 tb"
+    },
+    {
+      "index": 34,
+      "narration": "回到书里的重点：获得机会的效果，和实际获…",
+      "scene": "34_two",
+      "focusId": "tk",
+      "notes": "机会效果 vs 保险效果（左卡）"
+    },
+    {
+      "index": 35,
+      "narration": "所以，读到一篇随机实验，先问清楚两件事：…",
+      "scene": "35_close",
+      "focusId": "mg",
+      "notes": "放大镜问：随机的是什么"
+    }
+  ]
+}
