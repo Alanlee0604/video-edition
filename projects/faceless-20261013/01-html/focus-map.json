@@ -1,0 +1,41 @@
+[
+  {
+    "para": 1,
+    "word": "收银",
+    "ids": [
+      "reg"
+    ]
+  },
+  {
+    "para": 1,
+    "word": "结账",
+    "ids": [
+      "ctr",
+      "reg"
+    ]
+  },
+  {
+    "para": 1,
+    "word": "收银员",
+    "ids": [
+      "cash",
+      "reg"
+    ]
+  },
+  {
+    "para": 1,
+    "word": "顾客",
+    "ids": [
+      "cust",
+      "tk"
+    ]
+  },
+  {
+    "para": 1,
+    "word": "彩票",
+    "ids": [
+      "cust",
+      "tk"
+    ]
+  }
+]
