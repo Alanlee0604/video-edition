@@ -1,0 +1,17 @@
+{
+  "name": "faceless-case-05",
+  "version": "1.0.0",
+  "private": true,
+  "description": "书籍案例：Medicaid 断点的解释与排查",
+  "scripts": {
+    "render": "node render.cjs full",
+    "frames": "node render.cjs frames",
+    "verify": "node verify.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

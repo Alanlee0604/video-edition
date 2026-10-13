@@ -1,0 +1,1 @@
+{"name":"semantic-teaching-cases-02-04","version":"1.0.0","private":true,"description":"Deterministic 1080p Chinese teaching animations with locked narration","dependencies":{"@napi-rs/canvas":"0.1.100"}}

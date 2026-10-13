@@ -1,0 +1,13 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{execFileSync}=require('node:child_process');
+const root=__dirname,D=JSON.parse(fs.readFileSync(path.join(root,'timeline.json')));
+const file=process.argv[2]||path.join(root,'output',`${D.id}_1080p30.mp4`),audio=path.join(root,'narration.m4a');
+const probe=(p,args)=>JSON.parse(execFileSync('ffprobe',['-v','error',...args,'-of','json',p],{maxBuffer:64*1024*1024}));
+const v=probe(file,['-show_streams','-show_format']),vs=v.streams.find(s=>s.codec_type==='video');
+if(!vs||vs.width!==1920||vs.height!==1080||vs.r_frame_rate!=='30/1'||Number(vs.nb_frames)!==D.frames)throw Error('Unexpected video dimensions, frame rate or frame count');
+if(v.streams.filter(s=>s.codec_type==='audio').length!==1)throw Error('Expected exactly one audio stream');
+const packets=p=>probe(p,['-select_streams','a:0','-show_packets','-show_data_hash','sha256','-show_entries','packet=pts,dts,duration,size,data_hash']).packets;
+if(JSON.stringify(packets(file))!==JSON.stringify(packets(audio)))throw Error('AAC packet payloads or timing differ from the locked narration');
+execFileSync('ffmpeg',['-v','error','-xerror','-i',file,'-f','null','-'],{stdio:['ignore','ignore','pipe']});
+const sha=crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+console.log(JSON.stringify({file,sha256:sha,frames:D.frames,fps:30,duration:v.format.duration,decode:'complete',audio:'AAC packet data and timestamps identical to narration.m4a'},null,2));
