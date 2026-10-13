@@ -46,5 +46,42 @@ K.node=(id,x,y,n,{r:R=34}={})=>`<g id="${id}">${ci(x,y,R,'var(--g4)')}<text x="$
 K.nodeOn=(id,x,y,n,{r:R=34}={})=>`<g id="${id}">${ci(x,y,R,'var(--pink)')}<text x="${x}" y="${y+11}" text-anchor="middle" style="fill:var(--INK);font-size:32px;font-weight:700">${n}</text></g>`;
 K.ring=(id,x,y,R=28)=>`<circle id="${id}" cx="${x}" cy="${y}" r="${R}" fill="var(--g4)"/>`;
 K.bar=(id,x,y,w,h,{tone:t='g',dashed=false}={})=>`<rect id="${id}" data-origin="center bottom" x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${dashed?'none':t==='pink'?'var(--pink)':'var(--g3)'}" ${dashed?'stroke="var(--g1)" stroke-width="5" stroke-dasharray="12 12"':''}/>`;
+
+/* ---- v3 视觉表意补充：勾叉、问号（图形，不是文字）、活动喇叭、骰子、放大镜、未知原因、定位针、大门、实心箭头 ---- */
+Object.assign(DRAW,{
+  promo:(c)=>pa('M-34 -16 L16 -42 L16 42 L-34 16Z',c)+r(-50,-18,20,36,c,6)+r(-34,12,16,34,'var(--INKW)',6)+st('M30 -22 Q44 0 30 22',c,7)+st('M42 -36 Q64 0 42 36',c,7),
+  die:(c)=>r(-44,-44,88,88,c,18)+[[-22,-22],[22,-22],[0,0],[-22,22],[22,22]].map(([x,y])=>ci(x,y,8,'var(--INK)')).join(''),
+  magnifier:(c)=>`<circle cx="-10" cy="-10" r="30" fill="var(--CR)" stroke="${c}" stroke-width="12"/>`+st('M14 14 L42 42',c,16),
+  ghost:(c)=>pa('M-40 46 L-40 -6 Q-40 -46 0 -46 Q40 -46 40 -6 L40 46 L26 34 L13 46 L0 34 L-13 46 L-26 34Z',c)+st('M-12 -14 Q-12 -28 1 -28 Q14 -28 14 -16 Q14 -6 2 0 L2 8','var(--INK)',7)+ci(2,22,5,'var(--INK)'),
+  pin:(c)=>pa('M0 46 Q-38 0 -38 -16 A38 38 0 1 1 38 -16 Q38 0 0 46Z',c)+ci(0,-16,14,'var(--CR)'),
+  gate:(c)=>r(-46,-40,16,86,c,6)+r(30,-40,16,86,c,6)+r(-50,-46,100,18,c,8),
+  trendup:(c)=>st('M-40 30 L-10 0 L10 14 L40 -30',c,10)+pa('M26 -34 L46 -40 L42 -18Z',c),
+});
+K.mark=(id,x,y,s=80,ok=true)=>{const k=s/100;return `<g id="${id}"><g transform="translate(${x} ${y}) scale(${k})">${ci(0,0,50,ok?'var(--MI)':'var(--CO)')}${ok?st('M-24 2 L-6 20 L26 -16','var(--INK)',14):st('M-20 -20 L20 20 M20 -20 L-20 20','var(--CR)',14)}</g></g>`};
+K.qmark=(id,x,y,s=100,c='var(--pink)')=>{const k=s/100;return `<g id="${id}"><g transform="translate(${x} ${y}) scale(${k})">${st('M-26 -22 Q-26 -50 0 -50 Q28 -50 28 -24 Q28 -6 4 4 L4 18',c,16)}${ci(4,44,9,c)}</g></g>`};
+K.farrow=(id,x1,y1,x2,y2,c='var(--ink)',w=12)=>{const a=Math.atan2(y2-y1,x2-x1),h=w*2.6,bx=x2-Math.cos(a)*h,by=y2-Math.sin(a)*h,nx=-Math.sin(a)*w*1.5,ny=Math.cos(a)*w*1.5;
+  return `<g id="${id}"><path d="M${x1} ${y1} L${bx.toFixed(1)} ${by.toFixed(1)}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" fill="none"/>${pa(`M${(bx+nx).toFixed(1)} ${(by+ny).toFixed(1)} L${x2} ${y2} L${(bx-nx).toFixed(1)} ${(by-ny).toFixed(1)}Z`,c)}</g>`};
+/* 坐标轴：y 轴顶端用彩票图形代替“彩票销量”文字 */
+K.chart=(id,x,y,w,h,{icon='ticket'}={})=>`<g id="${id}">${r(x-4,y,8,h,'var(--g2)',4)}${r(x-4,y+h-4,w,8,'var(--g2)',4)}${icon?K.icon(id+'i',icon,x+60,y+10,80,'var(--g1)'):''}</g>`;
+/* 活动开始的竖线：虚线 + 顶端喇叭 */
+K.start=(id,x,y1,y2)=>`<g id="${id}"><path d="M${x} ${y1+60} L${x} ${y2}" stroke="var(--g1)" stroke-width="6" stroke-dasharray="14 14" fill="none"/>${K.icon(id+'i','promo',x,y1+10,90,'var(--pink)')}</g>`;
+
+/* ---- v4 版式：按图形真实外接框定位（底边/中心/等高），并给对齐检查打标签 ---- */
+const BB={"user":[-40.2,-60.2,80.4,108.2],"user-round":[-40.2,-64,80.4,112],"users":[-62.2,-60.2,124.4,108.2],"store":[-54,-34,108,86],"ticket":[-44,-26,88,52],"fuel":[-34,-38,76,83],"cigarette":[-26,-52,52,92],"shopping-basket":[-36,-29,72,63],"calendar":[-38,-40,76,78],"landmark":[-46,-42,92,86],"toggle-right":[-44,-22,88,44],"toggle-left":[-44,-22,88,44],"clipboard-pen":[-28,-42,56,78],"register":[-50,-44,100,80],"promo":[-50,-42,103,88],"die":[-44,-44,88,88],"magnifier":[-40,-40,82,82],"ghost":[-40,-46,80,92],"pin":[-38,-54,76,100],"gate":[-50,-46,100,92],"trendup":[-40,-40,86,70]};
+const meta=(m={})=>`${m.g?` data-g="${m.g}"`:''}${m.a?` data-a="${m.a}"`:''}${m.in?` data-in="${m.in}"`:''}${m.o?` data-origin="${m.o}"`:''}`;
+K.BB=BB;
+/* fit：在 w×h 框内能放下的最大高度 */
+K.fit=(name,w,h)=>{const b=BB[name];return Math.min(h,w*b[3]/b[2])};
+/* ib：底边落在 bottom、水平中心 cx、外接框高 h；ic：外接框中心在 (cx,cy) */
+K.ib=(id,name,cx,bottom,h,t='ink',m={})=>{const b=BB[name],k=h/b[3];const x=cx-(b[0]+b[2]/2)*k,y=bottom-(b[1]+b[3])*k;
+  return `<g${meta({...m,o:null})}><g id="${id}"${m.o?` data-origin="${m.o}"`:''}><g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${k.toFixed(4)})">${DRAW[name](tone(t))}</g></g></g>`};
+K.ic=(id,name,cx,cy,h,t='ink',m={})=>K.ib(id,name,cx,cy+h/2,h,t,m);
+/* fb：人物脚底落在 ground，总高 h（不画腿时以躯干底为底） */
+K.fb=(id,cx,ground,h,o={},m={})=>{const legs=o.legs!==false,tot=legs?436.6:312.6,s=h/tot,y=ground-(legs?130:6)*s;return `<g${meta(m)}>${K.figure(id,cx,y,{...o,s})}</g>`};
+/* 容器：统一圆角三档 R1=16 / R2=32 / 胶囊 */
+K.R={1:16,2:32};
+K.box=(id,x,y,w,h,{rx=32,fill='var(--g4)',stroke=null,dash=false}={},m={})=>`<g${meta(m)}><rect id="${id}" data-box="1" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${stroke?'none':fill}" ${stroke?`stroke="${stroke}" stroke-width="6"`:''} ${dash?'stroke-dasharray="16 16"':''}/></g>`;
+/* 包一层对齐标签 */
+K.tag=(html,m)=>`<g${meta(m)}>${html}</g>`;
 K.FLAT={r,ci,pa,st};
 })();

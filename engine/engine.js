@@ -87,7 +87,7 @@ function verbs(tl){
 /* ---------- 场景运行时 ---------- */
 const LABEL_KINDS={schematic:'示意图',teaching:'教学示例 · 非研究数据',record:'书中描述 · 方向示意，非原始数值'};
 const G=c=>120+c*142, SPAN=n=>n*142-24; // 12 栏网格：第 c 栏左边缘 / 跨 n 栏宽度
-function Episode({timeline:D,scenes,episode,offset=0,subs=null}){
+function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
   const A=Anchors(D),tl=new Timeline(),V=verbs(tl),stage=document.getElementById('stage');
   stage.insertAdjacentHTML('beforeend','<div id="anno"></div><div id="ep"></div><div id="sub"></div>');
   const anno=document.getElementById('anno'),sub=document.getElementById('sub');
@@ -104,8 +104,8 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null}){
     tl.to(sc.el,{opacity:[0,1]},sc.t0-DUR.scene*0.5,1e-3,'linear');
     if(i>0)tl.to(sc.el,{wipe:[0,1]},sc.t0-DUR.scene*0.5,DUR.scene,'inout');
     if(i+1<S.length)tl.to(sc.el,{opacity:[1,0]},sc.t1+DUR.scene*0.5+0.02,1e-3,'linear');
-    // 环境镜头：整场缓慢漂移（±16px，不放大以免越出安全区），保证没有死帧
-    tl.to(sc.cam,{x:[-16,16],y:[8,-8]},sc.t0-0.3,sc.t1-sc.t0+0.6,'linear');
+    // 环境镜头：整场缓慢漂移（±36px 往返，每 4 秒折返一次，不放大以免越出安全区），保证没有死帧
+    {const a=sc.t0-0.3,b=sc.t1+0.3,seg=4;let x=-36,y=12,k=0;for(let t=a;t<b;t+=seg,k++){const nx=-x,ny=-y;tl.to(sc.cam,{x:[x,nx],y:[y,ny]},t,Math.min(seg,b-t),'linear');x=nx;y=ny;}}
     // 场景内动作（作用域限定在本场景）
     const q=s=>s.split(',').map(x=>`section[data-id="${sc.id}"] ${x.trim()}`).join(',');
     const scoped={};for(const k in V)scoped[k]=(s,...r)=>V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r);
@@ -125,10 +125,10 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null}){
     anno.textContent=lab;anno.style.opacity=lab?1:0;anno.dataset.kind=sc.kind||'';
     stage.dataset.theme=sc.theme||'';
     const c=SUBS?SUBS.filter(c=>t>=c.start&&t<c.end).pop():D.captions.filter(c=>t>=c.start&&t<c.end).pop();
-    const h=c?(c.lines||[c.text]).join('<br>'):'';if(sub.innerHTML!==h)sub.innerHTML=h;
+    const h=(subtitles&&c)?(c.lines||[c.text]).join('<br>'):'';if(sub.innerHTML!==h)sub.innerHTML=h;
     return {t,scene:sc.id,kind:sc.kind||'',label:lab};
   }
-  window.EP={subs:SUBS,tl,seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
+  window.EP={subtitles,captions:SUBS||D.captions,subs:SUBS,tl,seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
   window.seek=seek;
   return window.EP;
 }
@@ -153,6 +153,16 @@ function audit(){
     const r=e.getBoundingClientRect();if(!r.width&&!r.height)continue;
     if(r.left-st.left<SAFE.l-0.5||r.top-st.top<SAFE.t-0.5||r.right-st.left>SAFE.r+0.5||r.bottom-st.top>SAFE.b+0.5)out.unsafe.push({shape:e.tagName+(e.id?'#'+e.id:''),rect:[r.left,r.top,r.right,r.bottom].map(Math.round)});
   }
+  // 画面主体文字（不含字幕/标注/集名）与主体外接框
+  const cur=[...document.querySelectorAll('#stage section.scene')].filter(e=>getComputedStyle(e).visibility!=='hidden').pop();
+  out.body=[];out.box=null;
+  if(cur){const bx=[1e9,1e9,-1e9,-1e9];
+    for(const e of cur.querySelectorAll('*')){if(!visible(e))continue;
+      if([...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim()))out.body.push(e.textContent.trim());
+      if(e.tagName==='g'||e.tagName==='svg'||e.classList.contains('cam'))continue;
+      const r=e.getBoundingClientRect();if(!r.width||!r.height)continue;
+      bx[0]=Math.min(bx[0],r.left-st.left);bx[1]=Math.min(bx[1],r.top-st.top);bx[2]=Math.max(bx[2],r.right-st.left);bx[3]=Math.max(bx[3],r.bottom-st.top);}
+    if(bx[2]>bx[0])out.box=bx.map(Math.round);}
   const a=document.getElementById('anno');
   out.label={kind:a.dataset.kind,text:a.textContent,visible:visible(a)&&a.textContent.length>0};
   return out;

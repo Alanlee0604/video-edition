@@ -21,17 +21,24 @@ def main():
             b=pw.chromium.launch(executable_path=CHROME);pg=b.new_page(viewport={'width':1920,'height':1080})
             errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
             pg.goto('file://'+os.path.abspath(a.page));pg.evaluate('document.fonts.ready')
-            small={};unsafe={};nolabel=[];t=a.start;n=0
+            small={};unsafe={};nolabel=[];body={};box={};t=a.start;n=0
             while t<a.end:
                 info=pg.evaluate(f'seek({t})');r=pg.evaluate('ENGINE.audit()');n+=1
                 for s in r['small']:small.setdefault(s['text'],[s['px'],t])
                 for u in r['unsafe']:
                     k=u.get('text') or u.get('shape');unsafe.setdefault(info['scene']+' | '+k,[u['rect'],round(t,2)])
                 if pg.evaluate(f"EP.needsLabel('{info['kind']}')") and not r['label']['visible']:nolabel.append([round(t,2),info['scene']])
+                sc=info['scene'];body.setdefault(sc,set()).update(r['body'])
+                if r['box']:
+                    b0=box.get(sc,[1e9,1e9,-1e9,-1e9]);bb=r['box'];box[sc]=[min(b0[0],bb[0]),min(b0[1],bb[1]),max(b0[2],bb[2]),max(b0[3],bb[3])]
                 t+=a.step
-            subs=pg.evaluate('(EP.subs||[]).map(s=>s.text)');longsubs=[x for x in subs if len(x)>14]
+            subs=pg.evaluate('EP.captions.map(s=>s.text)');subon=pg.evaluate('EP.subtitles')
             b.close()
-        rep['audit']={'subtitles':len(subs),'subtitles_over_14':longsubs,'samples':n,'page_errors':errs,'small_text':small,'outside_safe_area':unsafe,'missing_label':nolabel}
+        SA=(1824-96)*(984-96)
+        cov={k:round(max(0,(min(v[2],1824)-max(v[0],96)))*max(0,(min(v[3],984)-max(v[1],96)))/SA,3) for k,v in box.items()}
+        btxt={k:sorted(v) for k,v in body.items()}
+        rep['body_text']=btxt;rep['coverage']=cov
+        rep['audit']={'subtitles_on':subon,'subtitle_lines':len(subs),'scenes_body_text_over_2':{k:v for k,v in btxt.items() if len(v)>2},'body_text_over_8_chars':{k:[x for x in v if len(x)>8] for k,v in btxt.items() if any(len(x)>8 for x in v)},'scenes_coverage_under_60':{k:v for k,v in cov.items() if v<0.6},'samples':n,'page_errors':errs,'small_text':small,'outside_safe_area':unsafe,'missing_label':nolabel}
     json.dump(rep,open(a.json,'w'),ensure_ascii=False,indent=1)
-    print(json.dumps({k:(v if k!='audit' else {kk:(len(vv) if isinstance(vv,(dict,list)) else vv) for kk,vv in v.items()}) for k,v in rep.items() if v is not None},ensure_ascii=False)[:3000])
+    print(json.dumps({k:(v if k!='audit' else {kk:(len(vv) if isinstance(vv,(dict,list)) else vv) for kk,vv in v.items()}) for k,v in rep.items() if v is not None and k not in('body_text','coverage')},ensure_ascii=False)[:3000])
 if __name__=='__main__':main()
