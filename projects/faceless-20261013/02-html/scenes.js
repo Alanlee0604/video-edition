@@ -121,7 +121,7 @@ scene('fte','schematic',A=>A.P(11),svg(gnd()+fb('p0',C4c[0],GND,fh,BOSS,{g:'grou
 /* 11 只看新泽西：政策与大环境搅在一起 */
 scene('confound','schematic',A=>A.P(12),svg(gnd()+store('s',960,SH,FOC)+ic('pol','landmark',C3c[0],380,180,FOC)+
   `<g id="eco" data-g="src" data-a="cy"><g transform="translate(${C3c[2]} 380)">${'<path d="M-110 50 Q-130 -10 -70 -20 Q-60 -80 0 -70 Q50 -100 80 -40 Q140 -40 120 50Z" fill="var(--g2)"/>'}${ln('ed','M-70 0 L-20 20 L20 0 L70 40','var(--CO)',12)}</g></g>`+
-  AR('a1',C3c[0]+110,460,840,600,'var(--pink)',14)+AR('a2',C3c[2]-120,460,1080,600,'var(--g1)',14)+Q('q',960,300,180,'var(--ink)')),'i',[['#pol',12,'只看新泽西','pop'],['#eco',12,'经济不太好','pop'],['#a1,#a2',12,'搅在一起'],['#q',12,'分不开','pop']]);
+  AR('a1',C3c[0]+110,460,840,600,'var(--pink)',14)+AR('a2',C3c[2]-120,460,1080,600,'var(--g1)',14)+Q('q',960,300,180,'var(--ink)')),'i',[['#pol',12,'只看新泽西','pop'],['#eco',12,'经济不景气','pop'],['#a1,#a2',12,'混在一起'],['#q',12,'无法分开','pop']]);
 
 /* 12 宾州挨着、同一大环境 → 替身 */
 scene('neighbor','schematic',A=>A.P(13),svg(gnd()+store('nj',C2c[0],SH2*.82,FOC)+store('pa',C2c[1],SH2*.82,'var(--g1)')+
@@ -180,7 +180,7 @@ scene('both','schematic',A=>A.P(21),svg(gnd()+store('s0',C2c[0],SH2*.82,FOC)+AR(
 scene('did','none',A=>A.P(22),K.term('term',1,160,'双重差分')+svg(
   [0,1].map(k=>pill('m'+k,C4c[k+1]+0,560,280,160,'−',k?'var(--g2)':FOC,'var(--INK)',120,{g:'mm',a:'cy'})).join('')+
   `<g id="eq"><rect x="${C4c[3]-64}" y="520" width="128" height="24" rx="12" fill="var(--ink)"/><rect x="${C4c[3]-64}" y="576" width="128" height="24" rx="12" fill="var(--ink)"/></g>`+
-  storeAt('i0',C4c[0],640,160,FOC)),'c',[['#term',22,'双重差分','pop'],['#m0',22,'减两次','pop'],['#m1',22,'减两次','pop',.4],['#eq',22,'这么算','pop']]);
+  storeAt('i0',C4c[0],640,160,FOC)),'c',[['#term',22,'双重差分','pop'],['#m0',22,'减两次','pop'],['#m1',22,'减两次','pop',.4],['#eq',22,'这样做','pop']]);
 
 /* 20 平行趋势：变化同幅，起点可不同 */
 {const c=CF(296,1380);
