@@ -30,3 +30,7 @@ svg text{font-family:"Num","NotoSC";fill:var(--g1);font-size:28px}
 #stage[data-theme=u]{--a:var(--CR);--af:var(--SU)}#stage[data-theme=i]{--a:var(--CR);--af:var(--CO)}#stage[data-theme=c]{--a:var(--INK);--af:var(--CO)}#stage[data-theme=m]{--a:var(--INK);--af:var(--U)}
 #stage[data-theme] #anno{color:var(--a);opacity:.85}#stage[data-theme] #anno::before{background:var(--af)}#stage[data-theme] #sub{color:var(--a)}
 .term{color:var(--pink)}
+/* 聚焦镜头时，标注与字幕下垫一块与场景底色相同的衬底，内容推近后也不被遮挡、不糊字 */
+#anno{background:var(--scbg,transparent);padding:0 14px 0 34px;margin-left:-12px;border-radius:12px}#anno::before{left:12px}
+#sub .sb{background:var(--scbg,transparent);padding:2px 20px;border-radius:14px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+#stage[data-theme] #anno{opacity:1}
