@@ -122,7 +122,7 @@ function Episode({timeline:D,scenes,episode,offset=0}){
     const h=c?(c.lines||[c.text]).join('<br>'):'';if(sub.innerHTML!==h)sub.innerHTML=h;
     return {t,scene:sc.id,kind:sc.kind||'',label:lab};
   }
-  window.EP={seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
+  window.EP={tl,seek,scenes:S,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
   window.seek=seek;
   return window.EP;
 }
