@@ -1,0 +1,17 @@
+{
+  "name": "faceless-case-06",
+  "version": "1.0.0",
+  "private": true,
+  "description": "论文案例：Head Start 的贫困门槛",
+  "scripts": {
+    "render": "node render.cjs full",
+    "frames": "node render.cjs frames",
+    "verify": "node verify.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}
