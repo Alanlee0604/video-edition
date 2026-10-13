@@ -107,7 +107,7 @@ scene('scale','teaching',A=>A.P(12),
   svg(`<rect id="gnd" x="${X0}" y="${GND}" width="${W}" height="32" rx="16" fill="var(--g3)"/>`+ib('big','store',C2c[0],GND,hb,NEU,{g:'ground',a:'bottom',o:'center bottom'})+ib('crowd','users',C2c[0],GND,200,'var(--ink)')+
     ib('small','store',X1-he*108/86/2,GND,hs,NEU,{g:'ground',a:'bottom',o:'center bottom'})+ib('one','user-round',X1-he*108/86/2,GND,120,'var(--g1)')+
     M('no',960,248,152,false)+M('ok',960,248,152,true)),
-  ({in:i,to,pop,out,A})=>{i('#gnd,#big,#small',A.P(12)+.1);i('#crowd',A.W(12,'人来人往'));i('#one',A.W(12,'冷冷清清'));pop('#no',A.W(12,'没什么关系'));
+  ({in:i,to,pop,out,A})=>{i('#gnd,#big,#small',A.P(12)+.1);i('#crowd',A.W(12,'客流本来就大'));i('#one',A.W(12,'冷清的小店'));pop('#no',A.W(12,'没什么关系'));
     out('#crowd,#one,#no',A.W(12,'只有两家'));to('#big',{scale:[1,he/hb]},A.W(12,'只有两家'),1,'inout');to('#small',{scale:[1,he/hs]},A.W(12,'只有两家'),1,'inout');pop('#ok',A.W(12,'后来的差别'));},'打个比方');}
 
 /* 12 非同等比较组：四等分；骰子 | 挑店的人 | 店 | 店，同一地平线 */
@@ -187,7 +187,7 @@ const trow=(id,r,head,headTone,ups)=>{const y=TB.ry[r],mid=y+TB.rh/2,ih=fit('fue
 scene('predict','teaching',A=>A.P(23),
   svg(trow('A',0,'users','var(--ink)',[1,1,1,1])+trow('B',1,'promo',FOC,[1,0,0,0])),
   ({in:i,stagger,A})=>{i('#Ahb,#Ah,#Ac0,#Ac1,#Ac2,#Ac3',A.W(23,'整家店旺起来'));stagger(['#A0','#A1','#A2','#A3'],A.W(23,'进店的人'),.12);stagger(['#Au0','#Au1','#Au2','#Au3'],A.W(23,'也应该'),.12);
-    i('#Bhb,#Bh,#Bc0,#Bc1,#Bc2,#Bc3',A.W(24,'活动就不一样'));stagger(['#B0','#B1','#B2','#B3'],A.W(24,'只针对彩票'),.12);i('#Bu0',A.W(24,'只有彩票涨'));stagger(['#Bu1','#Bu2','#Bu3'],A.W(24,'别的商品'),.12);},'教学假设 · 两种解释的预测');
+    i('#Bhb,#Bh,#Bc0,#Bc1,#Bc2,#Bc3',A.W(24,'活动的影响则不同'));stagger(['#B0','#B1','#B2','#B3'],A.W(24,'只针对彩票'),.12);i('#Bu0',A.W(24,'只有彩票涨'));stagger(['#Bu1','#Bu2','#Bu3'],A.W(24,'别的商品'),.12);},'教学假设 · 两种解释的预测');
 
 /* 21 书中结果：四张卡，只有彩票卡有向上箭头 */
 {const cy0=216,ch=624,ih=232;
@@ -236,7 +236,7 @@ scene('remove','none',A=>A.P(32),
   svg([['toggle-right',FOC],['toggle-left','g'],['toggle-right',FOC]].map(([n,t],k)=>box('rb'+k,C3[k],cy0,448,ch,{rx:R2},{g:'cards',a:'top+sp'})+ic('t'+k,n,C3c[k],cy0+PAD+64,112,t,{in:'rb'+k,g:'tg',a:'cy+sp'})+
      ib('g'+k,'ghost',C3c[k],cy0+ch-PAD,264,'var(--g1)',{in:'rb'+k,g:'gh',a:'bottom+sp'})+M('x'+k,C3c[k]+136,cy0+ch-PAD-248,104,false)).join('')),
   ({pop,stagger,in:i,to,A})=>{pop('#term',A.W(32,'移除处理'));i('#rb0,#rb1,#rb2',A.P(32));stagger(['#t0','#t1','#t2'],A.W(32,'撤掉'),.4);
-    i('#g0',A.W(32,'别的原因'));i('#g1',A.W(32,'活动停的时候'));to('#g1',{opacity:[1,.2]},A.W(32,'刚好消失'),.5,'inout');i('#g2',A.W(32,'又刚好出现'));
+    i('#g0',A.W(32,'别的原因'));i('#g1',A.W(32,'一起停'));to('#g1',{opacity:[1,.2]},A.W(32,'一起开'),.5,'inout');i('#g2',A.W(32,'这样的巧合'));
     pop('#x0',A.W(32,'巧合'));pop('#x1',A.W(32,'次数越多'));pop('#x2',A.W(32,'越难成立'));});}
 
 /* 27 补缺口：三段等宽轨道（胶囊），开关居中其上；“只影响彩票的原因”沿轨道走 */
@@ -293,7 +293,7 @@ scene('recap','none',A=>A.P(38),
 scene('caution','none',A=>A.P(40),
   svg(`<rect id="gnd" x="${X0}" y="${GND}" width="${W}" height="32" rx="16" fill="var(--g3)"/>`+fb('bs',C4c[0]-24,GND,448,BOSS,{g:'ground',a:'bottom'})+ic('cb','clipboard-pen',C4c[0]+96,600,136,FOC)+
     [0,1,2,3].map(k=>ib('g'+k,'ghost',Math.round(gx(k)),GND,264,'var(--g1)',{g:'gh',a:'bottom+sp',o:'center bottom'})).join('')+Q('q',(gx(1)+gx(2))/2,296,224,'var(--ink)')),
-  ({in:i,pop,stagger,to,A})=>{i('#gnd',A.P(40));i('#bs,#cb',A.W(40,'老板自己报名'));stagger(['#g0','#g1','#g2','#g3'],A.W(40,'别的解释'),.12);
+  ({in:i,pop,stagger,to,A})=>{i('#gnd',A.P(40));i('#bs,#cb',A.W(40,'老板自己报名'));stagger(['#g0','#g1','#g2','#g3'],A.W(40,'其他解释'),.12);
     [0,1,2].forEach(k=>to('#g'+k,{opacity:[1,.3],scale:[1,.6]},A.W(40,'越来越难')+k*.2,.6,'inout'));pop('#q',A.W(40,'不能说'));});}
 
 /* 33 收尾：同一张图 + 图例栏（大问号、两只“别的解释”） */
