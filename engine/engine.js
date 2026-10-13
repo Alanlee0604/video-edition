@@ -104,8 +104,8 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
     tl.to(sc.el,{opacity:[0,1]},sc.t0-DUR.scene*0.5,1e-3,'linear');
     if(i>0)tl.to(sc.el,{wipe:[0,1]},sc.t0-DUR.scene*0.5,DUR.scene,'inout');
     if(i+1<S.length)tl.to(sc.el,{opacity:[1,0]},sc.t1+DUR.scene*0.5+0.02,1e-3,'linear');
-    // 环境镜头：整场缓慢漂移（±36px 往返，每 4 秒折返一次，不放大以免越出安全区），保证没有死帧
-    {const a=sc.t0-0.3,b=sc.t1+0.3,seg=4;let x=-36,y=12,k=0;for(let t=a;t<b;t+=seg,k++){const nx=-x,ny=-y;tl.to(sc.cam,{x:[x,nx],y:[y,ny]},t,Math.min(seg,b-t),'linear');x=nx;y=ny;}}
+    // 无循环镜头：画面静止，只在场景内做一次单向轻微推近（1 → 1.015，≤2%），不往复
+    tl.to(sc.cam,{scale:[1,1.015]},sc.t0,Math.max(.5,sc.t1-sc.t0),'linear');
     // 场景内动作（作用域限定在本场景）
     const q=s=>s.split(',').map(x=>`section[data-id="${sc.id}"] ${x.trim()}`).join(',');
     const scoped={};for(const k in V)scoped[k]=(s,...r)=>V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r);
