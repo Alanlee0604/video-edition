@@ -1,0 +1,17 @@
+{
+  "name": "faceless-case-07",
+  "version": "1.0.0",
+  "private": true,
+  "description": "论文案例：医保抽签中的分派与参保",
+  "scripts": {
+    "render": "node render.cjs full",
+    "frames": "node render.cjs frames",
+    "verify": "node verify.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}
