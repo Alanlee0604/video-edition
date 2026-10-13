@@ -131,7 +131,7 @@ scene('its','none',A=>A.P(7),K.term('term',1,160,'打断时间序列')+svg(pchar
 const panel=k=>{const m=mini(C2[k],y0,cw,ch);return tag(card('c'+k,C2[k],y0,cw,ch),{g:'card',a:'bottom'})+axes(m)+
   (k?ln('l1',series(m,.02,.6,u=>.75,.03,14,7)+' L'+series(m,.62,.98,u=>.22,.03,8,8).slice(1),LOC,9):ln('l0',series(m,.02,.98,u=>.5,.5,22,6),'var(--g1)',9))+
   M('m'+k,C2[k]+cw-72,y0+72,104,!!k)};
-scene('stable','schematic',A=>A.P(8),svg(panel(0)+panel(1)),'u',[['#l0,#m0',8,'上下晃'],['#l1,#m1',8,'长期都很稳']]);}
+scene('stable','schematic',A=>A.P(8),svg(panel(0)+panel(1)),'u',[['#l0,#m0',8,'经常起伏'],['#l1,#m1',8,'长期都很稳']]);}
 
 /* 09 这个案例：收费前长期高，收费一开始骤降 */
 {const c=CF(296);
@@ -235,7 +235,7 @@ scene('rule','schematic',A=>A.P(34),svg([0,1,2].map(k=>tag(card('c'+k,C3[k],y0,c
 scene('close','none',A=>A.P(35),svg(pchart('ax',c)+feeLine('f',c,.5)+
   ln('lo',series(c,.03,.5,u=>.78,.05,24,1)+' L'+series(c,.52,.97,u=>.3,.05,22,2).slice(1),'var(--g2)',8)+ln('ld',series(c,.03,.97,u=>.5,.05,46,3),LD,14)+
   ln('alt',`M${pt(c,.5,.5)} L${pt(c,.97,.18)}`,LD,6,true)+M('x',Math.round(c.x+.8*c.w),Math.round(c.y+c.h-.2*c.h),80,false)+
-  phone('p1',LEG,GND-200,160,LD)+M('ok',LEG,GND-440,128,true)),'u',[['#alt,#x',37,'一起骤降'],['#ok',37,'站稳','pop']]);}
+  phone('p1',LEG,GND-200,160,LD)+M('ok',LEG,GND-440,128,true)),'u',[['#alt,#x',37,'一起骤降'],['#ok',37,'站得住','pop']]);}
 
 window.SCENES=S;
 })();
