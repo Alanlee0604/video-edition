@@ -84,6 +84,56 @@ function verbs(tl){
   };
 }
 
+
+/* ---------- 聚焦镜头 ---------- */
+const CAMCFG={gap:2.6,maxS:1.32,minS:1.08,safeTop:150,safeBot:850,W:1920,H:1080};
+const CAMLOG=[];
+function camPlan(tl,sc,ev,q){
+  const C=CAMCFG,cam=sc.cam;cam.style.transformOrigin='50% 50%';
+  const st=document.getElementById('stage').getBoundingClientRect();
+  const box=els=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,n=0;for(const e of els){const r=e.getBoundingClientRect();if(r.width<4||r.height<4)continue;n++;
+      x0=Math.min(x0,r.left-st.left);y0=Math.min(y0,r.top-st.top);x1=Math.max(x1,r.right-st.left);y1=Math.max(y1,r.bottom-st.top)}
+    return n?{x0,y0,x1,y1,w:x1-x0,h:y1-y0}:null};
+  const HIDE={out:1,dim:1};
+  const evs=ev.map(([t,sel,d,k])=>({t,k,els:[...sc.el.querySelectorAll(q(sel))]})).sort((a,b)=>a.t-b.t);
+  const hiddenAfter=(e,t,until)=>evs.some(v=>v.t>t&&v.t<until&&HIDE[v.k]&&v.els.some(x=>x===e||x.contains(e)||e.contains(x)));
+  // 计算一个取景：把 b 放到画面中心（略偏上，避开字幕），缩放不超过 maxS，且主体完整留在安全区内
+  const frame=b=>{if(!b)return null;const safeH=C.safeBot-C.safeTop;
+    let s=Math.min(C.maxS,(C.W*0.82)/b.w,(safeH*0.9)/b.h);if(s<C.minS)return null;
+    const cx=(b.x0+b.x1)/2,cy=(b.y0+b.y1)/2,ty=(C.safeTop+C.safeBot)/2;
+    let x=-(cx-C.W/2)*s,y=(ty-C.H/2)-(cy-C.H/2)*s;
+    const mx=C.W/2*(s-1),my=C.H/2*(s-1);x=Math.max(-mx,Math.min(mx,x));y=Math.max(-my,Math.min(my,y));
+    // 校验主体落在安全区
+    const X=p=>C.W/2+(p-C.W/2)*s+x,Y=p=>C.H/2+(p-C.H/2)*s+y;
+    if(X(b.x0)<20||X(b.x1)>C.W-20||Y(b.y0)<C.safeTop-40||Y(b.y1)>C.safeBot+10)return null;
+    return {s:+s.toFixed(4),x:+x.toFixed(1),y:+y.toFixed(1)}};
+  const pts=[...new Set([sc.t0,...evs.map(v=>v.t)].map(x=>+x.toFixed(2)))].filter(x=>x>=sc.t0-.01&&x<sc.t1).sort((a,b)=>a-b);pts.push(sc.t1);
+  let cur={s:1,x:0,y:0};
+  const go=(to,at,dur)=>{tl.to(cam,{scale:[cur.s,to.s],x:[cur.x,to.x],y:[cur.y,to.y]},at,dur,'inout');CAMLOG.push({scene:sc.id,at:+at.toFixed(2),dur,to});cur=to};
+  for(let i=0;i+1<pts.length;i++){
+    const a=pts[i],b=pts[i+1],g=b-a;if(g<=C.gap)continue;
+    const last=i+1===pts.length-1;      // 间隙一直到场景结束：不必回全景
+    // 候选焦点：此刻之前最近被提到、且之后仍可见的元素，按时间倒序
+    const cands=evs.filter(v=>v.t<=a+.01&&!HIDE[v.k]).reverse().map(v=>({v,b:box(v.els.filter(e=>!hiddenAfter(e,v.t,b)))})).map(o=>({...o,f:frame(o.b)})).filter(o=>o.f);
+    // 补充候选：场景里一开始就可见的主体（根节点的子元素），排除之后才出现的元素
+    const later=evs.filter(v=>v.t>a+.01).flatMap(v=>v.els);
+    const root=sc.el.querySelector('#m')||sc.el.querySelector('svg')||sc.cam;
+    const statics=[...root.children].filter(e=>!later.some(x=>x===e||x.contains(e)||e.contains(x))&&!hiddenAfter(e,a,b)).map(e=>({b:box([e])})).filter(o=>o.b&&o.b.w*o.b.h>15000).sort((p,q)=>q.b.w*q.b.h-p.b.w*p.b.h).map(o=>({...o,f:frame(o.b)})).filter(o=>o.f);
+    const seen=new Set();const pool=[...cands,...statics].filter(o=>{const k=Math.round(o.f.s*20)+','+Math.round(o.f.x/40)+','+Math.round(o.f.y/40);if(seen.has(k))return false;seen.add(k);return true});
+    cands.length=0;cands.push(...pool);
+    if(!cands.length)continue;
+    const dIn=g<4?0.9:1.2,dOut=g<4?0.9:1.0,tIn=a+0.35,tOut=last?b:b-dOut-0.05;
+    go(cands[0].f,tIn,dIn);
+    let t=tIn+dIn,k=1;
+    while(tOut-t>3.0){ // 长间隙：每 ≤3s 移到下一个重点（或在同一重点上再推近一点），仍是一次性单向移动
+      let nx=cands[k]?cands[k].f:null;k++;
+      if(!nx){if(cur.s+0.05<=C.maxS+0.03)nx={s:+(cur.s+0.05).toFixed(4),x:+(cur.x*(cur.s+0.05)/cur.s).toFixed(1),y:+(cur.y*(cur.s+0.05)/cur.s).toFixed(1)};else nx={s:1,x:0,y:0};}
+      if(nx.s===1&&!last){break}
+      const at=t+Math.min(2.2,(tOut-t-1.0)/2);go(nx,at,1.0);t=at+1.0}
+    if(!last)go({s:1,x:0,y:0},tOut,dOut);
+  }
+}
+
 /* ---------- 场景运行时 ---------- */
 const LABEL_KINDS={schematic:'示意图',teaching:'教学示例 · 非研究数据',record:'书中描述 · 方向示意，非原始数值'};
 const G=c=>120+c*142, SPAN=n=>n*142-24; // 12 栏网格：第 c 栏左边缘 / 跨 n 栏宽度
@@ -93,6 +143,7 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
   const anno=document.getElementById('anno'),sub=document.getElementById('sub');
   document.getElementById('ep').textContent=episode||'';
   const ACT=[];
+  const CAM=(sc,ev,q)=>camPlan(tl,sc,ev,q);
   const S=scenes.map((sc,i)=>{
     const el=document.createElement('section');el.className='scene'+(sc.theme?' theme-'+sc.theme:'');el.dataset.id=sc.id;
     el.innerHTML=`<div class="cam">${sc.html}</div>`;stage.insertBefore(el,anno);
@@ -108,12 +159,14 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
     // 镜头完全静止：不推近、不漂移、不往复
     // 场景内动作（作用域限定在本场景）
     const q=s=>s.split(',').map(x=>`section[data-id="${sc.id}"] ${x.trim()}`).join(',');
-    const ev=[];const scoped={};for(const k in V)scoped[k]=(s,...r)=>{if(typeof s==='string'&&typeof r[0]==='number')ev.push([r[0],s,k==='draw'?DUR.draw:DUR.std]);return V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r)};
+    const ev=[];const scoped={};for(const k in V)scoped[k]=(s,...r)=>{if(typeof s==='string'&&typeof r[0]==='number')ev.push([r[0],s,k==='draw'?DUR.draw:DUR.std,k]);return V[k](typeof s==='string'?q(s):Array.isArray(s)?s.map(q):s,...r)};
     scoped.to=(s,p,...r)=>tl.to(q(s),p,...r);
     scoped.seq=items=>V.seq(items.map(([s,t])=>[q(s),t]));
     sc.build({...scoped,A,t0:sc.t0,t1:sc.t1});
     // 不做任何呼吸/脉冲/循环动效；只记录真实动作时间
-    {ev.forEach(e=>ACT.push(e[0]));}
+    {ev.forEach(e=>ACT.push(e[0]));
+     // 聚焦镜头：动作间隔 >2.6s 时，平滑推近/平移到刚被旁白提到的元素（一次性、单向、inout 缓动），下一动作前平滑回全景；不循环、不呼吸
+     CAM(sc,ev,q);}
   });
   // 精简字幕：[段落, 锚点词('' = 段落开头), 文本]；显示到下一条开始，最长到本段结束后 0.6 秒
   let SUBS=null;
@@ -126,11 +179,12 @@ function Episode({timeline:D,scenes,episode,offset=0,subs=null,subtitles=true}){
     const sc=sceneAt(t),lab=sc.label||LABEL_KINDS[sc.kind]||'';
     anno.textContent=lab;anno.style.opacity=lab?1:0;anno.dataset.kind=sc.kind||'';
     stage.dataset.theme=sc.theme||'';
+    if(!sc._bg)sc._bg=getComputedStyle(sc.el).backgroundColor;if(stage._bg!==sc._bg){stage.style.setProperty('--scbg',sc._bg);stage._bg=sc._bg}
     const c=SUBS?SUBS.filter(c=>t>=c.start&&t<c.end).pop():D.captions.filter(c=>t>=c.start&&t<c.end).pop();
-    const h=(subtitles&&c)?(c.lines||[c.text]).join('<br>'):'';if(sub.innerHTML!==h)sub.innerHTML=h;
+    const h=(subtitles&&c)?'<span class="sb">'+(c.lines||[c.text]).join('<br>')+'</span>':'';if(sub.innerHTML!==h)sub.innerHTML=h;
     return {t,scene:sc.id,kind:sc.kind||'',label:lab};
   }
-  window.EP={subtitles,captions:SUBS||D.captions,subs:SUBS,tl,seek,scenes:S,actions:ACT,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
+  window.EP={camlog:CAMLOG,subtitles,captions:SUBS||D.captions,subs:SUBS,tl,seek,scenes:S,actions:ACT,duration:D.duration,A,needsLabel:k=>k in LABEL_KINDS};
   window.seek=seek;
   return window.EP;
 }
