@@ -3,6 +3,7 @@
 import json,sys,os,re,hashlib,subprocess,difflib
 from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import tts
+from speech_end import speech_end
 F=[]  # 审校改动已写入各集 narration.text.json；重配音时直接读取该文件
 CACHE=os.environ.get('TTS_CACHE','/workspace/tts_cache')
 PUN=set('，。？！；：、“”‘’（）《》…—,.?!;:"\'() ')
@@ -90,12 +91,14 @@ def build(ep,wt,workdir,GAP=0.42,LEAD=0.35,TAIL=1.2):
     lst.write(f"file '{lead}'\n")
     for i,(p,(mp3,words)) in enumerate(zip(P,res)):
         text=texts[p['id']]; ct,un=align(text,words)
-        a=max(0,words[0]['startTime']-0.08); b=min(dur(mp3),words[-1]['endTime']+0.18)
+        # 末字时间戳常比真实语音结束早 0.1–1.1s：结束点取“语音真正结束（静音检测）+0.15s”，不再按时间戳裁切
+        a=max(0,words[0]['startTime']-0.08); se,D0=speech_end(mp3); b=min(D0,max(words[-1]['endTime']+0.18,se+0.15))
         seg=f'{workdir}/p{i:03d}.wav'
         subprocess.run(['ffmpeg','-v','error','-y','-i',mp3,'-ss',f'{a:.3f}','-to',f'{b:.3f}','-ar','24000','-ac','1',seg],check=True)
         L=dur(seg)
         p['text']=text; p['chars']=[{'c':c,'start':round(t+s-a,4),'end':round(t+e-a,4)} for c,(s,e) in zip(text,ct)]
         p['start']=p['chars'][0]['start']; p['end']=max(c['end'] for c in p['chars'])
+        p['end']=max(p['end'],round(t+se-a,4)); p['speech_end']=p['end']; p['audio_len']=round(L,4)
         p.pop('provider_start',None)
         lst.write(f"file '{seg}'\n"); t+=L
         if i+1<len(P): lst.write(f"file '{sil}'\n"); t+=GAP
