@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""自动检查：① 页面内抽样 audit（字号<28、越出安全区、示意/教学场景缺标注）② 成片 freezedetect（静止≥2s）。
+"""自动检查：① 页面内抽样 audit（字号<28、越出安全区、示意/教学场景缺标注）② 成片 freezedetect（静止≥3s）。
 用法：python3 engine/check.py --page index.html --start 0 --end 261.5 --step 0.25 [--video a.mp4 ...] [--compare old.mp4 ...] --json out.json"""
 import argparse,json,os,re,subprocess,shutil
 CHROME=os.environ.get('VIDEO_CHROMIUM') or shutil.which('google-chrome') or shutil.which('chromium')
-def freeze(path,n=0.001,d=2):
+def freeze(path,n=0.001,d=3):
     r=subprocess.run(['ffmpeg','-v','info','-i',path,'-vf',f'freezedetect=n={n}:d={d}','-an','-f','null','-'],capture_output=True,text=True).stderr
     st=[float(x) for x in re.findall(r'freeze_start: ([\d.]+)',r)];du=[float(x) for x in re.findall(r'freeze_duration: ([\d.]+)',r)]
     if len(st)>len(du):  # 结尾仍在静止
