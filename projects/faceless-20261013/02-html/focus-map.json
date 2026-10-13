@@ -1,0 +1,257 @@
+{
+  "episode": "02",
+  "items": [
+    {
+      "index": 1,
+      "narration": "员工少了，政策却可能保住了工作。这话听着…",
+      "scene": "01_hook",
+      "focusId": "s",
+      "notes": "员工少了 vs 保住工作"
+    },
+    {
+      "index": 2,
+      "narration": "先说明一下：这只是一个讲道理用的例子，不…",
+      "scene": "01_hook",
+      "focusId": null,
+      "notes": "过渡：讲道理用的例子"
+    },
+    {
+      "index": 3,
+      "narration": "为什么“员工少了”和“政策保住了工作”能…",
+      "scene": "01_hook",
+      "focusId": "s",
+      "notes": "为何两句能同时成立"
+    },
+    {
+      "index": 4,
+      "narration": "打个比方。一家店原来有二十个人，政策之后…",
+      "scene": "02_example",
+      "focusId": "br",
+      "notes": "20人→更少的例子"
+    },
+    {
+      "index": 5,
+      "narration": "所以，想判断政策有没有用，要比的不是“政…",
+      "scene": "03_compare",
+      "focusId": "s",
+      "notes": "要比的不是政策前后本店"
+    },
+    {
+      "index": 6,
+      "narration": "难处在于，一家店不可能同时活在两个版本的…",
+      "scene": "04_twoworld",
+      "focusId": "f",
+      "notes": "两个世界"
+    },
+    {
+      "index": 7,
+      "narration": "书里把那个没有发生、但我们必须拿来比的版…",
+      "scene": "05_cf",
+      "focusId": "f",
+      "notes": "反事实"
+    },
+    {
+      "index": 8,
+      "narration": "不懂这个概念，最常犯的错，就是拿“政策后…",
+      "scene": "06_mistake",
+      "focusId": "a0",
+      "notes": "拿政策后减政策前的错"
+    },
+    {
+      "index": 9,
+      "narration": "反事实永远看不到，那怎么办？只能找一个替…",
+      "scene": "07_standin",
+      "focusId": "a",
+      "notes": "替身"
+    },
+    {
+      "index": 10,
+      "narration": "这项研究的替身，是从两个州政策不一样这件…",
+      "scene": "08_wage",
+      "focusId": "nj",
+      "notes": "两州政策不同"
+    },
+    {
+      "index": 11,
+      "narration": "卡德和克鲁格抓住了这个差别。他们调查了两…",
+      "scene": "09_survey",
+      "focusId": "n",
+      "notes": "卡德克鲁格调查"
+    },
+    {
+      "index": 12,
+      "narration": "就业怎么算？论文用的指标叫“全职当量”。…",
+      "scene": "10_fte",
+      "focusId": "eq",
+      "notes": "全职当量"
+    },
+    {
+      "index": 13,
+      "narration": "为什么连宾州也要调查？只看新泽西州，会犯…",
+      "scene": "11_confound",
+      "focusId": "s",
+      "notes": "为何也查宾州"
+    },
+    {
+      "index": 14,
+      "narration": "宾州和新泽西州挨着，同一段时间里，面对的…",
+      "scene": "12_neighbor",
+      "focusId": "nj",
+      "notes": "两州挨着"
+    },
+    {
+      "index": 15,
+      "narration": "书里管这种做法叫“有前后测的非同等比较组…",
+      "scene": "13_design",
+      "focusId": "x",
+      "notes": "有前后测的非同等比较组"
+    },
+    {
+      "index": 16,
+      "narration": "下面用一组数字，把这种比较完整地算一遍。…",
+      "scene": "13_design",
+      "focusId": null,
+      "notes": "过渡：用数字算一遍"
+    },
+    {
+      "index": 17,
+      "narration": "假设政策前，两州的快餐店平均每家都有二十…",
+      "scene": "14_table",
+      "focusId": "s0",
+      "notes": "假设表：政策前都20人"
+    },
+    {
+      "index": 18,
+      "narration": "第一次相减，各算各的变化。新泽西州，十八…",
+      "scene": "15_diff1",
+      "focusId": "zi",
+      "notes": "第一次相减"
+    },
+    {
+      "index": 19,
+      "narration": "算到这一步，新泽西州是减二。如果停在这里…",
+      "scene": "15_diff1",
+      "focusId": "s0",
+      "notes": "停在减二会误判"
+    },
+    {
+      "index": 20,
+      "narration": "第二次相减，拿新泽西州的变化，减去宾州的…",
+      "scene": "16_diff2",
+      "focusId": "gap",
+      "notes": "第二次相减=双重差分"
+    },
+    {
+      "index": 21,
+      "narration": "这个正二是怎么来的？我们一步一步看。第一…",
+      "scene": "17_steps",
+      "focusId": "nj",
+      "notes": "正二怎么来"
+    },
+    {
+      "index": 22,
+      "narration": "所以，“新泽西州的就业下降了”和“估计出…",
+      "scene": "18_both",
+      "focusId": "g",
+      "notes": "下降与效果可并存"
+    },
+    {
+      "index": 23,
+      "narration": "这种减两次的算法，通常叫“双重差分”。书…",
+      "scene": "19_did",
+      "focusId": "eq",
+      "notes": "双重差分"
+    },
+    {
+      "index": 24,
+      "narration": "算完了，真正的问题才开始：宾州凭什么能代…",
+      "scene": "19_did",
+      "focusId": "eq",
+      "notes": "宾州凭什么当替身"
+    },
+    {
+      "index": 25,
+      "narration": "第二次相减不是变戏法。它背后藏着一个假设…",
+      "scene": "20_parallel",
+      "focusId": "t",
+      "notes": "平行趋势假设"
+    },
+    {
+      "index": 26,
+      "narration": "要注意，这里要求的是“变化”相近，不是“…",
+      "scene": "20_parallel",
+      "focusId": "t",
+      "notes": "要的是变化相近"
+    },
+    {
+      "index": 27,
+      "narration": "起点一样，不代表以后会一起走。打个比方，…",
+      "scene": "21_fail",
+      "focusId": "nj",
+      "notes": "起点一样≠以后平行"
+    },
+    {
+      "index": 28,
+      "narration": "反过来，起点不一样也不要紧。假设新泽西州…",
+      "scene": "22_diffstart",
+      "focusId": "nj",
+      "notes": "起点不同也可以"
+    },
+    {
+      "index": 29,
+      "narration": "那怎么判断平行趋势成不成立？它本身没法直…",
+      "scene": "23_evidence",
+      "focusId": "mg",
+      "notes": "如何检查平行趋势"
+    },
+    {
+      "index": 30,
+      "narration": "第三点特别要紧。假设就在同一时期，只有一…",
+      "scene": "24_shock",
+      "focusId": "cl",
+      "notes": "单边冲击破坏假设"
+    },
+    {
+      "index": 31,
+      "narration": "回到真实研究。作者没有发现，这次最低工资…",
+      "scene": "25_result",
+      "focusId": "nj",
+      "notes": "真实研究结论"
+    },
+    {
+      "index": 32,
+      "narration": "注意，刚才的二十、十八、十六和正二，全都…",
+      "scene": "25_result",
+      "focusId": "b",
+      "notes": "教学数字非论文原数"
+    },
+    {
+      "index": 33,
+      "narration": "这个结论的范围也要说清楚。它说的是这项研…",
+      "scene": "26_scope",
+      "focusId": "s",
+      "notes": "结论范围"
+    },
+    {
+      "index": 34,
+      "narration": "用书里的话讲，这仍然是非同等比较组设计。…",
+      "scene": "27_credible",
+      "focusId": "mg",
+      "notes": "仍是非同等比较组"
+    },
+    {
+      "index": 35,
+      "narration": "以后看到“政策之后增加了”或者“政策之后…",
+      "scene": "28_close",
+      "focusId": "g",
+      "notes": "看到增减先问反事实"
+    },
+    {
+      "index": 36,
+      "narration": "前后变化，告诉你现实发生了什么。因果效果…",
+      "scene": "28_close",
+      "focusId": "g",
+      "notes": "前后变化≠因果效果"
+    }
+  ]
+}
