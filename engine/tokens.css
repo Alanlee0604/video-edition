@@ -1,0 +1,16 @@
+/* 设计规范 tokens（所有集共用）
+   极简：纯色深底、单一强调色（粉）、其余中性灰阶；无渐变/阴影/发光；细线 2–3px；字重最多三档 400/500/700 */
+@font-face{font-family:"Num";src:url("fonts/InterVariable.ttf");font-weight:100 900;unicode-range:U+0030-0039,U+002B-002E,U+0025,U+00D7,U+2212}
+@font-face{font-family:"NotoSC";src:url("fonts/NotoSansSC.woff2") format("woff2");font-weight:100 900}
+:root{
+  --W:1920px;--H:1080px;--safe:96px;
+  /* 12 栏网格：边距 120，栏宽 118，栏距 24（栏距+栏宽 = 142） */
+  --gx:120px;--col:118px;--gut:24px;
+  /* 字号阶梯（下限 28） */
+  --fs-note:28px;--fs-label:32px;--fs-body:40px;--fs-lead:48px;--fs-sub:46px;--fs-title:64px;--fs-term:112px;
+  --w1:400;--w2:500;--w3:700;
+  /* 色板 */
+  --bg:#101012;--ink:#F2F2F3;--g1:#B4B4BA;--g2:#7C7C84;--g3:#3A3A40;--g4:#232327;
+  --pink:#F2A7C8;
+  --line:2px;--line2:3px;--dash:10 10;--r:12px;
+}
