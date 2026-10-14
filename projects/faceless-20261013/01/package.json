@@ -1,0 +1,16 @@
+{
+  "name": "case01-faceless-film",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline rendering of case 01 with the locked narration track",
+  "scripts": {
+    "render": "node render.cjs",
+    "smoke": "node smoke.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

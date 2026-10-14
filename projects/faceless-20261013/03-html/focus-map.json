@@ -1,0 +1,271 @@
+{
+  "episode": "03",
+  "items": [
+    {
+      "index": 1,
+      "narration": "一条完全没动的线，凭什么也能成为证据？这…",
+      "scene": "01_hook",
+      "focusId": "f",
+      "notes": "没动的线也能成证据"
+    },
+    {
+      "index": 2,
+      "narration": "以前不知道一个电话号码，可以打电话去查号…",
+      "scene": "03_drop",
+      "focusId": "c",
+      "notes": "查号收费"
+    },
+    {
+      "index": 3,
+      "narration": "你可能觉得：这还用研究吗？收钱了，大家当…",
+      "scene": "03_drop",
+      "focusId": "c",
+      "notes": "收钱→少查？直觉"
+    },
+    {
+      "index": 4,
+      "narration": "这个直觉很可能是对的。可“很可能对”和“…",
+      "scene": "04_intuition",
+      "focusId": "c",
+      "notes": "直觉 vs 证据"
+    },
+    {
+      "index": 5,
+      "narration": "最简单的做法，是拿收费前一个月和收费后一…",
+      "scene": "04_intuition",
+      "focusId": "c",
+      "notes": "前后一个月比"
+    },
+    {
+      "index": 6,
+      "narration": "这种只看前后两个点的比较，至少有两个漏洞…",
+      "scene": "05_twopoint",
+      "focusId": "st",
+      "notes": "两点比较的漏洞"
+    },
+    {
+      "index": 7,
+      "narration": "研究者手里的资料，不只两个月，而是按月记…",
+      "scene": "06_series",
+      "focusId": "n",
+      "notes": "按月长期序列"
+    },
+    {
+      "index": 8,
+      "narration": "这就是“打断时间序列”的基本想法。白话说…",
+      "scene": "07_its",
+      "focusId": "f",
+      "notes": "打断时间序列"
+    },
+    {
+      "index": 9,
+      "narration": "为什么要看这么长？因为只有知道原来的规律…",
+      "scene": "08_stable",
+      "focusId": "c0",
+      "notes": "看清原来的规律"
+    },
+    {
+      "index": 10,
+      "narration": "这个案例里，收费前，查号量长期都比较高。…",
+      "scene": "09_case",
+      "focusId": "f",
+      "notes": "收费前查号量高"
+    },
+    {
+      "index": 11,
+      "narration": "先说第一个漏洞。",
+      "scene": "09_case",
+      "focusId": null,
+      "notes": "过渡：先说第一个漏洞"
+    },
+    {
+      "index": 12,
+      "narration": "打个比方，你偏偏挑了查号量特别高的一个月…",
+      "scene": "10_peak",
+      "focusId": "dn",
+      "notes": "挑高峰月会误判"
+    },
+    {
+      "index": 13,
+      "narration": "这种特别高或特别低以后、又回到平常水平的…",
+      "scene": "11_rtm",
+      "focusId": "a1",
+      "notes": "回归均值"
+    },
+    {
+      "index": 14,
+      "narration": "它为什么会发生？一步一步说。第一，每个月…",
+      "scene": "12_why",
+      "focusId": "b0",
+      "notes": "为何会发生"
+    },
+    {
+      "index": 15,
+      "narration": "不懂这个，最常犯的错是：专挑问题最严重的…",
+      "scene": "13_credit",
+      "focusId": "c",
+      "notes": "专挑最严重月"
+    },
+    {
+      "index": 16,
+      "narration": "长期记录怎么挡住这个错？这个案例里，收费…",
+      "scene": "14_longrec",
+      "focusId": "f",
+      "notes": "长期记录挡住回归均值"
+    },
+    {
+      "index": 17,
+      "narration": "第二个漏洞，长期记录就挡不住了。",
+      "scene": "14_longrec",
+      "focusId": null,
+      "notes": "过渡：第二个漏洞"
+    },
+    {
+      "index": 18,
+      "narration": "假设就在收费的那个月，刚好发生了别的事，…",
+      "scene": "14_longrec",
+      "focusId": "f",
+      "notes": "同期别的事"
+    },
+    {
+      "index": 19,
+      "narration": "书里把这种情况叫“历史威胁”。白话说：跟…",
+      "scene": "15_history",
+      "focusId": "l",
+      "notes": "历史威胁"
+    },
+    {
+      "index": 20,
+      "narration": "这是打断时间序列最大的软肋。一条线只能告…",
+      "scene": "16_suspects",
+      "focusId": "c",
+      "notes": "一条线的软肋"
+    },
+    {
+      "index": 21,
+      "narration": "研究者找的第二条线，是长途查号。新的收费…",
+      "scene": "17_second",
+      "focusId": "p0",
+      "notes": "长途查号=第二条线"
+    },
+    {
+      "index": 22,
+      "narration": "为什么偏偏选它？我们看看，按两种解释，它…",
+      "scene": "17_second",
+      "focusId": "c1x",
+      "notes": "为何选长途"
+    },
+    {
+      "index": 23,
+      "narration": "如果下降是收费造成的：收费只针对区内查号…",
+      "scene": "18_predfee",
+      "focusId": "c",
+      "notes": "收费解释→长途不应降"
+    },
+    {
+      "index": 24,
+      "narration": "如果下降是某个共同的事件造成的，比如大家…",
+      "scene": "19_predcommon",
+      "focusId": "p0",
+      "notes": "共同事件→长途也应动"
+    },
+    {
+      "index": 25,
+      "narration": "按两种解释，长途查号应该怎么变，说法不一…",
+      "scene": "19_predcommon",
+      "focusId": "p0",
+      "notes": "两种预测不同"
+    },
+    {
+      "index": 26,
+      "narration": "结果，区内查号大幅下降，长途查号没有同步…",
+      "scene": "20_result",
+      "focusId": "c",
+      "notes": "区内降、长途未同步降"
+    },
+    {
+      "index": 27,
+      "narration": "书里把长途查号这样的结果，叫“非同等依变…",
+      "scene": "21_nedv",
+      "focusId": "a",
+      "notes": "非同等依变项"
+    },
+    {
+      "index": 28,
+      "narration": "所以，这种对照不是随便找个没变的东西就行…",
+      "scene": "22_conds",
+      "focusId": "cn",
+      "notes": "对照条件"
+    },
+    {
+      "index": 29,
+      "narration": "第一，这项收费不该直接影响它。长途查号不…",
+      "scene": "22_conds",
+      "focusId": "p0",
+      "notes": "收费不直接影响长途"
+    },
+    {
+      "index": 30,
+      "narration": "第二，你担心的那种共同干扰，应该会影响它…",
+      "scene": "22_conds",
+      "focusId": "p0",
+      "notes": "共同干扰应影响它"
+    },
+    {
+      "index": 31,
+      "narration": "为什么第二个条件这么要紧？打个比方，你去…",
+      "scene": "23_chair",
+      "focusId": "x",
+      "notes": "椅子反例"
+    },
+    {
+      "index": 32,
+      "narration": "一个对照有用，是因为它本来可能动，结果却…",
+      "scene": "23_chair",
+      "focusId": "x",
+      "notes": "对照要可能动却没动"
+    },
+    {
+      "index": 33,
+      "narration": "长途查号也不是万能的。",
+      "scene": "23_chair",
+      "focusId": null,
+      "notes": "过渡：长途不是万能"
+    },
+    {
+      "index": 34,
+      "narration": "它能排除的，是那些会同时影响区内和长途的…",
+      "scene": "24_limit",
+      "focusId": "c",
+      "notes": "能排除的范围"
+    },
+    {
+      "index": 35,
+      "narration": "所以，我们能做的，是把某一类解释排除得更…",
+      "scene": "25_rule",
+      "focusId": "die",
+      "notes": "排除一类解释"
+    },
+    {
+      "index": 36,
+      "narration": "回到开头的问题。那条没动的线，并不是没用…",
+      "scene": "26_close",
+      "focusId": "f",
+      "notes": "没动的线有用"
+    },
+    {
+      "index": 37,
+      "narration": "长期记录回答的是：这次下降，是不是原来的…",
+      "scene": "26_close",
+      "focusId": "p1",
+      "notes": "长期记录 vs 对照线"
+    },
+    {
+      "index": 38,
+      "narration": "如果长途查号也一起骤降，我们就得重新想一…",
+      "scene": "26_close",
+      "focusId": "p1",
+      "notes": "若长途也降则重想"
+    }
+  ]
+}
