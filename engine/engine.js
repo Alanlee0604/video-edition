@@ -89,6 +89,7 @@ function verbs(tl){
 const CAMCFG={maxS:1.26,minS:1.08,safeTop:160,safeBot:860,W:1920,H:1080,pad:110,nb:240};
 const CAMLOG=[];
 function camPlan(tl,sc,ev,q,D,A){
+  return; // 镜头已取消：全程静止，无任何相机变换
   const C=CAMCFG,cam=sc.cam;cam.style.transformOrigin='50% 50%';
   const st=()=>document.getElementById('stage').getBoundingClientRect();
   const rect=e=>{const r=e.getBoundingClientRect(),S=st();return {x0:r.left-S.left,y0:r.top-S.top,x1:r.right-S.left,y1:r.bottom-S.top,w:r.width,h:r.height}};
