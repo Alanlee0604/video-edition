@@ -1,0 +1,26 @@
+/* 设计规范 tokens（所有集共用）
+   极简：纯色深底、单一强调色（粉）、其余中性灰阶；无渐变/阴影/发光；细线 2–3px；字重最多三档 400/500/700 */
+@font-face{font-family:"Num";src:url("fonts/InterVariable.ttf");font-weight:100 900;unicode-range:U+0030-0039,U+002B-002E,U+0025,U+00D7,U+2212}
+@font-face{font-family:"NotoSC";src:url("fonts/NotoSansSC.woff2") format("woff2");font-weight:100 900}
+:root{
+  --W:1920px;--H:1080px;--safe:96px;
+  /* 12 栏网格：边距 120，栏宽 118，栏距 24（栏距+栏宽 = 142） */
+  --gx:120px;--col:118px;--gut:24px;
+  /* 字号阶梯（下限 28） */
+  --fs-note:28px;--fs-label:32px;--fs-body:40px;--fs-lead:48px;--fs-sub:46px;--fs-title:64px;--fs-term:112px;
+  --w1:400;--w2:500;--w3:700;
+  /* 色板 */
+  --bg:#101012;--ink:#F2F2F3;--g1:#B4B4BA;--g2:#7C7C84;--g3:#3A3A40;--g4:#232327;
+  --pink:#F2A7C8;
+  --line:2px;--line2:3px;--dash:10 10;--r:12px;
+}
+
+/* ===== 扁平矢量主题（mg-styles-15 / 01-flat-vector 色板）=====
+   群青 #2B2BFF  珊瑚 #FF5A4E  向日葵 #FFC62B  薄荷 #2EE6A8  奶油 #FFF6E9  墨蓝 #151433
+   每个场景一块纯色底；--pink 在扁平主题里代表“本屏唯一焦点色”。 */
+:root{--U:#2B2BFF;--UD:#1F1FCC;--UL:#4D4DFF;--UP:#A3A3FF;--CO:#FF5A4E;--COD:#E0433A;--SU:#FFC62B;--SUD:#F0A91A;--MI:#2EE6A8;--MID:#1FC28C;
+  --CR:#FFF6E9;--CRD:#F1E3CC;--CRS:#E6D3B8;--INK:#151433;--INKW:#2A2962;--SK:#FFB48C;--SKD:#F2976E;--line:5px;--line2:7px}
+.theme-u{--bg:var(--U);--ink:var(--CR);--g1:#D6D6FF;--g2:var(--UP);--g3:var(--UL);--g4:var(--UD);--pink:var(--SU)}
+.theme-i{--bg:var(--INK);--ink:var(--CR);--g1:#C9C8E6;--g2:#7D7BB0;--g3:#34336E;--g4:#201F4A;--pink:var(--CO)}
+.theme-c{--bg:var(--CR);--ink:var(--INK);--g1:#55537E;--g2:#9C98B8;--g3:var(--CRS);--g4:var(--CRD);--pink:var(--CO)}
+.theme-m{--bg:var(--MI);--ink:var(--INK);--g1:#14523F;--g2:#1C8A68;--g3:var(--MID);--g4:#5CF0BF;--pink:var(--U)}

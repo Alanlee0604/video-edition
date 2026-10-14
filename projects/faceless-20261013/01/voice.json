@@ -1,0 +1,10 @@
+{
+  "speaker": "zh_male_taocheng_uranus_bigtts",
+  "resource": "seed-tts-2.0",
+  "source_speech_rate": 0,
+  "final_speed": 1.2,
+  "pitch_preserved": true,
+  "locked_audio": "media/narration-approved.m4a",
+  "rerender_uses_tts": false,
+  "background_music": false
+}
