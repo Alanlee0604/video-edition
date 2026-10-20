@@ -32,9 +32,9 @@ scene('rule','schematic',A=>A.P(1),
     ib('reg','register',X0+PAD+96,640,160,'var(--CO)',{})+ib('tk','ticket',1104,640,88,'var(--SU)',{})+
     fb('cust',1470,GND,448,{shirt:'var(--CR)',shirtD:'var(--CRD)',hair:'var(--INK)',hairStyle:1,armL:58,armR:4},{g:'ground',a:'bottom'})+
     K.bubble('bub',880,176,448,136,780,360)+tag(K.stext('bt',1104,262,'来张彩票？',{anchor:'middle',fill:'var(--INK)',size:52,weight:700}),{in:'bub'})+
-    M('no',1328,176,104,false)+L('free',1430,512,'免费','var(--SU)',56)),
+    M('no',1328,176,104,false)+L('free',1290,488,'免费','var(--SU)',56)),
   ({in:i,pop,move,A})=>{i('#reg',A.P(1)+.1,{word:'收银'});i('#ctr',A.P(1)+.15,{word:'结账'});i('#cash',A.W(1,'收银员'),{word:'收银员'});i('#cust',A.W(1,'顾客'),{word:'顾客'});
-    pop('#bub,#bt',A.W(1,'要不要'));pop('#tk',A.W(1,'彩票'));pop('#no',A.W(1,'忘了问'));move('#tk',A.W(1,'免费'),[0,0],[328,-48],.9);pop('#free',A.W(1,'免费')+.6);});
+    pop('#bub,#bt',A.W(1,'要不要'));pop('#tk',A.W(1,'彩票'));pop('#no',A.W(1,'忘了问'));move('#tk',A.W(1,'免费'),[0,0],[186,-24],.9);pop('#free',A.W(1,'免费')+.6);});
 
 /* 03 销量上去了 */
 {const c=CF(false);
