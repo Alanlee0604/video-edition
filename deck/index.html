@@ -443,7 +443,7 @@ function __cv(C,rev){if(!C)return;
   const cp=Math.cos(phi*R),sp=Math.sin(phi*R),L=y=>P(BW*cp,y,-BW*sp);
   const poly=phi<-90?[L(0),P(0,0,0),P(BW,0,0),P(BW,BH,0),P(0,BH,0),L(BH)]:[P(0,0,0),P(BW,0,0),P(BW,BH,0),P(0,BH,0)];
   const open=t>.92;
-  if(rev){const fb=C.querySelector('.flatbook');if(fb){const A=P(0,0,0),B=P(96,0,0),E=P(0,128,0);fb.style.transform=`matrix(${(B[0]-A[0])/96},${(B[1]-A[1])/96},${(E[0]-A[0])/128},${(E[1]-A[1])/128},${A[0]},${A[1]})`}cb.style.opacity=1;cb.style.visibility='';const g=C.querySelector('.pg70');if(g){const o=es(pr(t,3.05,4.95));g.style.opacity=o;g.style.visibility=o>0?'':'hidden';const A=P(-96,4,0),B=P(96,4,0),E=P(-96,112,0);g.style.transform=`matrix(${(B[0]-A[0])/960},${(B[1]-A[1])/960},${(E[0]-A[0])/540},${(E[1]-A[1])/540},${A[0]},${A[1]})`}return {spine:P(0,BH/2,0),poly}}
+  if(rev){const fb=C.querySelector('.flatbook');if(fb){const A=P(0,0,0),B=P(96,0,0),E=P(0,128,0);fb.style.transform=`matrix(${(B[0]-A[0])/96},${(B[1]-A[1])/96},${(E[0]-A[0])/128},${(E[1]-A[1])/128},${A[0]},${A[1]})`}cb.style.opacity=1;cb.style.visibility='';const g=C.querySelector('.pg70');if(g){const o=es(pr(t,3.05,4.15));g.style.opacity=o;g.style.visibility=o>0?'':'hidden';const A=P(-96,4,0),B=P(96,4,0),E=P(-96,112,0);g.style.transform=`matrix(${(B[0]-A[0])/960},${(B[1]-A[1])/960},${(E[0]-A[0])/540},${(E[1]-A[1])/540},${A[0]},${A[1]})`}return {spine:P(0,BH/2,0),poly}}
   const full=t>=PE||bad||[[0,0],[960,0],[960,540],[0,540]].every(q=>inside(q[0],q[1],poly));
   hole.style.clipPath=full?'none':open?'polygon('+poly.map(q=>q[0].toFixed(2)+'px '+q[1].toFixed(2)+'px').join(',')+')':'polygon(0 0,0 0,0 0)';
   cb.style.visibility=full?'hidden':'';cb.style.opacity=ap;
